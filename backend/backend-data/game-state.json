@@ -1,0 +1,528 @@
+{
+  "player": {
+    "id": "player-1",
+    "life": 20,
+    "mana": 3,
+    "deck": {
+      "cardIds": [
+        "strike",
+        "shield",
+        "focus",
+        "bash",
+        "heal",
+        "charge"
+      ]
+    },
+    "hand": [
+      "strike",
+      "shield",
+      "focus"
+    ],
+    "position": "start"
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "start",
+        "title": "Start",
+        "icon": "🏁",
+        "layout": {
+          "x": 50,
+          "y": 0
+        },
+        "event": {
+          "type": "start"
+        }
+      },
+      {
+        "id": "node-1",
+        "title": "Battle 2",
+        "icon": "⚔️",
+        "layout": {
+          "x": 15,
+          "y": 25
+        },
+        "event": {
+          "type": "hard battle"
+        }
+      },
+      {
+        "id": "node-2",
+        "title": "Battle 3",
+        "icon": "⚔️",
+        "layout": {
+          "x": 26.666666666666664,
+          "y": 25
+        },
+        "event": {
+          "type": "hard battle"
+        }
+      },
+      {
+        "id": "node-3",
+        "title": "Rest 4",
+        "icon": "🛌",
+        "layout": {
+          "x": 38.33333333333333,
+          "y": 25
+        },
+        "event": {
+          "type": "new object"
+        }
+      },
+      {
+        "id": "node-4",
+        "title": "Treasure 5",
+        "icon": "🎁",
+        "layout": {
+          "x": 50,
+          "y": 25
+        },
+        "event": {
+          "type": "treasure"
+        }
+      },
+      {
+        "id": "node-5",
+        "title": "Battle 6",
+        "icon": "⚔️",
+        "layout": {
+          "x": 61.666666666666664,
+          "y": 25
+        },
+        "event": {
+          "type": "power up"
+        }
+      },
+      {
+        "id": "node-6",
+        "title": "Battle 7",
+        "icon": "⚔️",
+        "layout": {
+          "x": 73.33333333333334,
+          "y": 25
+        },
+        "event": {
+          "type": "power up"
+        }
+      },
+      {
+        "id": "node-7",
+        "title": "Treasure 8",
+        "icon": "🎁",
+        "layout": {
+          "x": 85,
+          "y": 25
+        },
+        "event": {
+          "type": "treasure"
+        }
+      },
+      {
+        "id": "node-8",
+        "title": "Battle 9",
+        "icon": "⚔️",
+        "layout": {
+          "x": 15,
+          "y": 50
+        },
+        "event": {
+          "type": "battle"
+        }
+      },
+      {
+        "id": "node-9",
+        "title": "Treasure 10",
+        "icon": "🎁",
+        "layout": {
+          "x": 26.666666666666664,
+          "y": 50
+        },
+        "event": {
+          "type": "treasure"
+        }
+      },
+      {
+        "id": "node-10",
+        "title": "Rest 11",
+        "icon": "🛌",
+        "layout": {
+          "x": 38.33333333333333,
+          "y": 50
+        },
+        "event": {
+          "type": "battle"
+        }
+      },
+      {
+        "id": "node-11",
+        "title": "Battle 12",
+        "icon": "⚔️",
+        "layout": {
+          "x": 50,
+          "y": 50
+        },
+        "event": {
+          "type": "battle"
+        }
+      },
+      {
+        "id": "node-12",
+        "title": "Treasure 13",
+        "icon": "🎁",
+        "layout": {
+          "x": 61.666666666666664,
+          "y": 50
+        },
+        "event": {
+          "type": "treasure"
+        }
+      },
+      {
+        "id": "node-13",
+        "title": "Battle 14",
+        "icon": "⚔️",
+        "layout": {
+          "x": 73.33333333333334,
+          "y": 50
+        },
+        "event": {
+          "type": "battle"
+        }
+      },
+      {
+        "id": "node-14",
+        "title": "Power Up 15",
+        "icon": "⚡",
+        "layout": {
+          "x": 85,
+          "y": 50
+        },
+        "event": {
+          "type": "power up"
+        }
+      },
+      {
+        "id": "node-15",
+        "title": "Battle 16",
+        "icon": "⚔️",
+        "layout": {
+          "x": 15,
+          "y": 75
+        },
+        "event": {
+          "type": "battle"
+        }
+      },
+      {
+        "id": "node-16",
+        "title": "Battle 17",
+        "icon": "⚔️",
+        "layout": {
+          "x": 29,
+          "y": 75
+        },
+        "event": {
+          "type": "battle"
+        }
+      },
+      {
+        "id": "node-17",
+        "title": "Rest 18",
+        "icon": "🛌",
+        "layout": {
+          "x": 43,
+          "y": 75
+        },
+        "event": {
+          "type": "rest"
+        }
+      },
+      {
+        "id": "node-18",
+        "title": "New Object 19",
+        "icon": "🪄",
+        "layout": {
+          "x": 57,
+          "y": 75
+        },
+        "event": {
+          "type": "new object"
+        }
+      },
+      {
+        "id": "node-19",
+        "title": "Rest 20",
+        "icon": "🛌",
+        "layout": {
+          "x": 71,
+          "y": 75
+        },
+        "event": {
+          "type": "rest"
+        }
+      },
+      {
+        "id": "node-20",
+        "title": "Battle 21",
+        "icon": "⚔️",
+        "layout": {
+          "x": 85,
+          "y": 75
+        },
+        "event": {
+          "type": "battle"
+        }
+      },
+      {
+        "id": "end",
+        "title": "End",
+        "icon": "🏁",
+        "layout": {
+          "x": 50,
+          "y": 100
+        },
+        "event": {
+          "type": "end"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "node-4"
+      },
+      {
+        "from": "start",
+        "to": "node-5"
+      },
+      {
+        "from": "start",
+        "to": "node-1"
+      },
+      {
+        "from": "start",
+        "to": "node-2"
+      },
+      {
+        "from": "start",
+        "to": "node-3"
+      },
+      {
+        "from": "start",
+        "to": "node-6"
+      },
+      {
+        "from": "start",
+        "to": "node-7"
+      },
+      {
+        "from": "node-1",
+        "to": "node-8"
+      },
+      {
+        "from": "node-1",
+        "to": "node-9"
+      },
+      {
+        "from": "node-2",
+        "to": "node-9"
+      },
+      {
+        "from": "node-2",
+        "to": "node-8"
+      },
+      {
+        "from": "node-3",
+        "to": "node-10"
+      },
+      {
+        "from": "node-3",
+        "to": "node-9"
+      },
+      {
+        "from": "node-4",
+        "to": "node-11"
+      },
+      {
+        "from": "node-4",
+        "to": "node-12"
+      },
+      {
+        "from": "node-5",
+        "to": "node-12"
+      },
+      {
+        "from": "node-5",
+        "to": "node-11"
+      },
+      {
+        "from": "node-6",
+        "to": "node-13"
+      },
+      {
+        "from": "node-6",
+        "to": "node-14"
+      },
+      {
+        "from": "node-7",
+        "to": "node-14"
+      },
+      {
+        "from": "node-7",
+        "to": "node-13"
+      },
+      {
+        "from": "node-8",
+        "to": "node-15"
+      },
+      {
+        "from": "node-8",
+        "to": "node-16"
+      },
+      {
+        "from": "node-9",
+        "to": "node-16"
+      },
+      {
+        "from": "node-9",
+        "to": "node-15"
+      },
+      {
+        "from": "node-10",
+        "to": "node-17"
+      },
+      {
+        "from": "node-10",
+        "to": "node-16"
+      },
+      {
+        "from": "node-11",
+        "to": "node-17"
+      },
+      {
+        "from": "node-11",
+        "to": "node-18"
+      },
+      {
+        "from": "node-12",
+        "to": "node-18"
+      },
+      {
+        "from": "node-12",
+        "to": "node-19"
+      },
+      {
+        "from": "node-13",
+        "to": "node-19"
+      },
+      {
+        "from": "node-13",
+        "to": "node-20"
+      },
+      {
+        "from": "node-14",
+        "to": "node-20"
+      },
+      {
+        "from": "node-14",
+        "to": "node-19"
+      },
+      {
+        "from": "node-15",
+        "to": "end"
+      },
+      {
+        "from": "node-16",
+        "to": "end"
+      },
+      {
+        "from": "node-17",
+        "to": "end"
+      },
+      {
+        "from": "node-18",
+        "to": "end"
+      },
+      {
+        "from": "node-19",
+        "to": "end"
+      },
+      {
+        "from": "node-20",
+        "to": "end"
+      },
+      {
+        "from": "start",
+        "to": "node-11"
+      },
+      {
+        "from": "node-1",
+        "to": "node-15"
+      },
+      {
+        "from": "node-5",
+        "to": "node-18"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "strike",
+      "name": "Strike",
+      "cost": 1,
+      "type": "attack",
+      "properties": {
+        "damage": 3
+      }
+    },
+    {
+      "id": "shield",
+      "name": "Shield",
+      "cost": 1,
+      "type": "defense",
+      "properties": {
+        "block": 3
+      }
+    },
+    {
+      "id": "focus",
+      "name": "Focus",
+      "cost": 2,
+      "type": "utility",
+      "properties": {
+        "manaGain": 2
+      }
+    },
+    {
+      "id": "bash",
+      "name": "Bash",
+      "cost": 2,
+      "type": "attack",
+      "properties": {
+        "damage": 5
+      }
+    },
+    {
+      "id": "heal",
+      "name": "Heal",
+      "cost": 1,
+      "type": "defense",
+      "properties": {
+        "recover": 2
+      }
+    },
+    {
+      "id": "charge",
+      "name": "Charge",
+      "cost": 1,
+      "type": "utility",
+      "properties": {
+        "speed": 1
+      }
+    }
+  ],
+  "history": [
+    "New run created"
+  ]
+}

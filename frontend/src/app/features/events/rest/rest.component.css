@@ -1,0 +1,4 @@
+.event-screen { padding: 18px; }
+.back-button { margin-bottom: 12px; }
+.event-description { margin: 12px 0 18px; text-align: center; display:flex; align-items:center; justify-content:center; min-height:120px; }
+.event-map { margin-top: 12px; }
