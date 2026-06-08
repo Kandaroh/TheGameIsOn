@@ -7,7 +7,8 @@ Key files
 - `backend/src/models/node-event.ts` — canonical event type definitions.
 - `backend/src/services/map-generator.service.ts` — decides event assignment (`randomEventType()` and `nodeIcons`).
 - `backend/src/models/node.ts` — node shape persisted on disk.
-- `backend/src/services/game-logic.service.ts` — runtime behavior when a player enters a node (implement event effects here).
+- `backend/src/services/game-logic.service.ts` — runtime behavior when a player enters a non-battle node.
+- `backend/src/services/battle.service.ts` — runtime behavior for battle card plays and enemy turns.
 - `backend/src/controllers/game.controller.ts` — expose any new API endpoints if needed.
 - `frontend/src/app/shared/models/node.model.ts` — frontend node type, must match persisted shape.
 - `frontend/src/app/features/map/map.component.ts` — how the node is displayed on the map (icons, title).

@@ -10,16 +10,24 @@ Quick-start reference for AI assistants. Angular frontend (`menu` → `map` → 
 
 **Backend**
 - `backend/src/services/map-generator.service.ts` — graph generation, event assignment, `nodeIcons`
-- `backend/src/services/game-logic.service.ts` — move/play-card domain logic
+- `backend/src/services/game-logic.service.ts` — move/play-card domain logic, initial state
+- `backend/src/services/battle.service.ts` — card-play + end-turn resolution against `BattleState`
 - `backend/src/services/persistence.service.ts` — JSON load/save
 - `backend/src/controllers/game.controller.ts` — request orchestration
 - `backend/src/routes/game.routes.ts` — API route definitions
+- `backend/src/repo/card-effect-repo.ts` — reads and caches `card-effects.json`
 - `backend/src/models/node-event.ts` — canonical event type union
+- `backend/src/models/battle-state.ts` — `Enemy` + `BattleState` interfaces
+- `backend/src/models/card-effect.ts` — `CardEffect` interface and action/target unions
+- `backend/backend-data/card-effects.json` — effect catalogue (id, action, value, target)
 
 **Frontend**
 - `frontend/src/app/features/map/map.component.ts` — map rendering and node interaction
-- `frontend/src/app/shared/services/game-state.service.ts` — screen routing and state exposure
+- `frontend/src/app/features/battle/battle.component.ts` — battle UI; reads enemies from `state.battle.enemies`
+- `frontend/src/app/shared/services/game-state.service.ts` — screen routing, state$, delegates play/endTurn to API
 - `frontend/src/app/shared/services/api.service.ts` — HTTP calls to backend
+- `frontend/src/app/shared/services/card-effect.service.ts` — thin logger only; real resolution is backend
+- `frontend/src/app/shared/models/battle-state.model.ts` — `EnemyModel` + `BattleStateModel`
 - `frontend/src/styles.css` — global styles; controls map canvas size and edge appearance
 
 ## API endpoints
@@ -30,9 +38,12 @@ Quick-start reference for AI assistants. Angular frontend (`menu` → `map` → 
 | `POST` | `/api/game/state` | Persist provided `GameState` body |
 | `POST` | `/api/game/action/new-run` | Generate a new run (resets state) |
 | `POST` | `/api/game/action/move` | Body `{ nextNodeId }` — move player |
-| `POST` | `/api/game/action/play-card` | Body `{ cardId }` — play a card |
+| `POST` | `/api/game/action/play-card` | Body `{ cardId }` — play a card (legacy/mana path) |
+| `GET` | `/api/game/action/companions` | Return companion catalogue |
 | `GET` | `/api/game/events` | List event specs and spawn caps |
 | `POST` | `/api/game/events/validate` | Body `{ eventType, count }` — validate spawn count |
+| `POST` | `/api/game/action/battle/play-card` | Body `{ cardId, companionId, targetIds? }` — play a card in battle |
+| `POST` | `/api/game/action/battle/end-turn` | Body `{}` — end player turn, trigger enemy AI |
 
 ## Key constraints
 
@@ -40,6 +51,8 @@ Quick-start reference for AI assistants. Angular frontend (`menu` → `map` → 
 - `node.layout.x` / `node.layout.y` are percentages (0–100); keep units unchanged or frontend SVG positioning breaks.
 - Always mirror model changes across `backend/src/models/` **and** `frontend/src/app/shared/models/`.
 - Follow layering strictly: `routes` → `controllers` → `services` → `repo` → `models`.
+- `GameState.battle` is `undefined` outside of a battle encounter and seeded by the frontend in `dealOpeningHand()` before the first backend call.
+- Card effect resolution lives entirely in `BattleService` + `card-effects.json`; the frontend `CardEffectService` is a logger only and must not apply game-rule changes.
 
 ## Common task shortcuts
 
@@ -47,7 +60,10 @@ Quick-start reference for AI assistants. Angular frontend (`menu` → `map` → 
 - **Tune map size/density:** edit `MapGeneratorService.generate()` options `minNodes`, `maxNodes`, `minLayers`, `maxLayers`.
 - **Tune edge probabilities:** edit random bias constants in `addExtraConnections()` inside `map-generator.service.ts`.
 - **Change edge style:** edit `.graph-canvas`, `.graph-lines svg path` / `line` in `frontend/src/styles.css`.
-- **Debug Start button:** call `POST /api/game/action/new-run`; if it returns JSON the backend is reachable. Then check DevTools → Network/Console for the `GameStateService.startNewRun()` call.
+- **Add a new card effect:** add a record to `backend/backend-data/card-effects.json`, then set `effectId` / `enhancedEffectId` on the card.
+- **Add a new effect action:** extend `CardEffectAction` in `card-effect.ts` and add a `case` in `BattleService.applyEffect()`.
+- **Debug a battle play:** check `GameState.history` and `GameState.battle.log` returned by `POST /api/game/action/battle/play-card` — both contain a plain-text trace of what happened.
+- **Debug Start button:** call `POST /api/game/action/new-run`; if it returns JSON the backend is reachable. Then check DevTools → Network/Console for the `GameStateService.beginCompanionSelection()` call.
 
 ## Run & build commands
 

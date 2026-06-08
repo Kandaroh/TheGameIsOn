@@ -1,21 +1,64 @@
-import { GameState } from '../models/game-state';
-import { BattleState } from '../models/battle-state';
+﻿import { GameState } from '../models/game-state';
+import { BattleState, Enemy } from '../models/battle-state';
 import { CardEffectRepository } from '../repo/card-effect-repo';
+import { DeckService } from './deck.service';
 
 /** Flat damage each enemy deals to each companion per enemy turn. */
 const ENEMY_ATTACK_DAMAGE = 2;
 
+/** Default enemies used when a battle node has no pre-configured encounter. */
+const DEFAULT_ENEMIES: Enemy[] = [
+  { id: 'wild-1', name: 'Wild Wolf',   life: 18, maxLife: 18, shield: 0, energy: 2, maxEnergy: 2, element: 'earth', type: 'Beast'     },
+  { id: 'wild-2', name: 'Stone Golem', life: 22, maxLife: 22, shield: 0, energy: 1, maxEnergy: 1, element: 'earth', type: 'Construct' },
+];
+
 /**
- * Resolves card-play and end-turn actions against the BattleState
- * that lives inside GameState.  All mutations return a new GameState
- * object (no in-place edits) so the caller can persist immediately.
+ * Resolves all battle-phase actions against the BattleState that lives inside
+ * GameState.  All methods return a new GameState (no in-place mutations) so
+ * the caller can persist immediately.
  */
 export class BattleService {
-  private effectRepo = new CardEffectRepository();
+  private effectRepo  = new CardEffectRepository();
+  private deckService = new DeckService();
 
   // ---------------------------------------------------------------------------
   // Public API
   // ---------------------------------------------------------------------------
+
+  /**
+   * Deal the opening hand and seed BattleState at the start of a battle node.
+   *
+   * - Clears any leftover hand from a previous encounter.
+   * - Draws HAND_SIZE cards; if the deck runs dry the discard pile is shuffled
+   *   back in automatically by DeckService.drawCards().
+   * - Seeds a fresh BattleState only when none is currently active, so
+   *   re-entering the same node never resets an ongoing fight.
+   */
+  startBattle(state: GameState): GameState {
+    const HAND_SIZE = 5;
+
+    const cleared: GameState = {
+      ...state,
+      player: { ...state.player, hand: [] },
+    };
+    const withHand = this.deckService.drawCards(cleared, HAND_SIZE);
+
+    const battle: BattleState =
+      withHand.battle && withHand.battle.active
+        ? withHand.battle
+        : {
+            active:  true,
+            turn:    1,
+            log:     ['Battle started!'],
+            enemies: DEFAULT_ENEMIES,
+          };
+
+    return {
+      ...withHand,
+      battle,
+      history: [...withHand.history, 'Battle started — opening hand dealt'],
+    };
+  }
 
   /**
    * Play a card during battle.
@@ -27,7 +70,7 @@ export class BattleService {
    *
    * On success the card is removed from hand, added to discard, the
    * companion's energy is decremented, and the resolved effect is applied
-   * to the BattleState (damage → enemy life, shield → companion shield, …).
+   * to the BattleState (damage -> enemy life, shield -> companion shield, ...).
    */
   async playCard(
     state: GameState,
@@ -57,7 +100,7 @@ export class BattleService {
       );
     }
 
-    // Deduct energy and move card hand → discard.
+    // Deduct energy and move card hand -> discard.
     const updatedCompanion = { ...companion, energy: companion.energy - card.cost };
     const firstIdx = state.player.hand.indexOf(cardId);
     const updatedHand = [
@@ -67,44 +110,31 @@ export class BattleService {
     const updatedDiscard = [...(state.player.discard ?? []), cardId];
 
     // Resolve the effect.
-    const enhanced = card.type === companion.type;
-    const effectId = enhanced ? (card.enhancedEffectId ?? card.effectId) : card.effectId;
-    const effect = effectId ? await this.effectRepo.getById(effectId) : undefined;
+    const enhanced  = card.type === companion.type;
+    const effectId  = enhanced ? (card.enhancedEffectId ?? card.effectId) : card.effectId;
+    const effect    = effectId ? await this.effectRepo.getById(effectId) : undefined;
 
-    let updatedBattle = { ...battle, log: [...battle.log] };
+    let updatedBattle     = { ...battle, log: [...battle.log] };
     let updatedCompanions = state.companions.map(c =>
       c.id === companionId ? updatedCompanion : c
     );
 
     if (effect) {
-      const result = this.applyEffect(
-        effect,
-        updatedBattle,
-        updatedCompanions,
-        companionId,
-        targetIds ?? []
-      );
-      updatedBattle = result.battle;
+      const result = this.applyEffect(effect, updatedBattle, updatedCompanions, companionId, targetIds ?? []);
+      updatedBattle     = result.battle;
       updatedCompanions = result.companions;
     }
 
-    const effectLabel = effect
-      ? effect.description
-      : `${card.name} played (no effect resolved)`;
-    const enhancedTag = enhanced ? ' [enhanced]' : '';
-    updatedBattle.log.push(
-      `${companion.name} played ${card.name}${enhancedTag}: ${effectLabel}`
-    );
+    const effectLabel  = effect ? effect.description : `${card.name} played (no effect resolved)`;
+    const enhancedTag  = enhanced ? ' [enhanced]' : '';
+    updatedBattle.log.push(`${companion.name} played ${card.name}${enhancedTag}: ${effectLabel}`);
 
     return {
       ...state,
-      player: { ...state.player, hand: updatedHand, discard: updatedDiscard },
+      player:     { ...state.player, hand: updatedHand, discard: updatedDiscard },
       companions: updatedCompanions,
-      battle: updatedBattle,
-      history: [
-        ...state.history,
-        `${companion.name} played ${card.name}${enhancedTag}`,
-      ],
+      battle:     updatedBattle,
+      history:    [...state.history, `${companion.name} played ${card.name}${enhancedTag}`],
     };
   }
 
@@ -121,16 +151,14 @@ export class BattleService {
       return this.appendHistory(state, `end-turn ignored — no active battle`);
     }
 
-    // Refill companion energy.
     const refilledCompanions = state.companions.map(companion => {
-      const max = companion.maxEnergy ?? companion.energy + companion.energyRefill;
+      const max      = companion.maxEnergy ?? companion.energy + companion.energyRefill;
       const refilled = Math.min(companion.energy + companion.energyRefill, max);
       return { ...companion, energy: refilled };
     });
 
-    // Enemy AI: each living enemy deals flat damage to every companion.
     let companions = refilledCompanions;
-    const log = [...battle.log];
+    const log      = [...battle.log];
 
     for (const enemy of battle.enemies) {
       if (enemy.life <= 0) continue;
@@ -138,21 +166,15 @@ export class BattleService {
         ...companion,
         life: Math.max(0, companion.life - ENEMY_ATTACK_DAMAGE),
       }));
-      log.push(
-        `${enemy.name} attacks! Each companion loses ${ENEMY_ATTACK_DAMAGE} life.`
-      );
+      log.push(`${enemy.name} attacks! Each companion loses ${ENEMY_ATTACK_DAMAGE} life.`);
     }
 
-    const updatedBattle: BattleState = {
-      ...battle,
-      turn: battle.turn + 1,
-      log,
-    };
+    const updatedBattle: BattleState = { ...battle, turn: battle.turn + 1, log };
 
     return {
       ...state,
       companions,
-      battle: updatedBattle,
+      battle:  updatedBattle,
       history: [...state.history, `Turn ${battle.turn} ended — enemies attacked`],
     };
   }
@@ -161,10 +183,6 @@ export class BattleService {
   // Private helpers
   // ---------------------------------------------------------------------------
 
-  /**
-   * Apply a resolved CardEffect to the current BattleState + companions.
-   * Returns new (immutable) copies of both.
-   */
   private applyEffect(
     effect: { action: string; value: number; target: string },
     battle: BattleState,
@@ -174,7 +192,6 @@ export class BattleService {
   ): { battle: BattleState; companions: GameState['companions'] } {
     switch (effect.action) {
       case 'damage': {
-        // Damage every listed enemy, or the first living enemy if no targets given.
         const toHit: string[] =
           targetIds.length > 0
             ? targetIds
@@ -183,19 +200,13 @@ export class BattleService {
         const updatedEnemies = battle.enemies.map(enemy => {
           if (!toHit.includes(enemy.id)) return enemy;
           const afterShield = Math.max(0, effect.value - enemy.shield);
-          const newShield = Math.max(0, enemy.shield - effect.value);
-          return {
-            ...enemy,
-            life: Math.max(0, enemy.life - afterShield),
-            shield: newShield,
-          };
+          const newShield   = Math.max(0, enemy.shield - effect.value);
+          return { ...enemy, life: Math.max(0, enemy.life - afterShield), shield: newShield };
         });
-
         return { battle: { ...battle, enemies: updatedEnemies }, companions };
       }
 
       case 'shield': {
-        // Add shield to the acting companion.
         const updatedCompanions = companions.map(c => {
           if (c.id !== actorId) return c;
           return { ...c, shield: ((c as any).shield ?? 0) + effect.value };
@@ -214,7 +225,6 @@ export class BattleService {
 
       case 'evade':
       case 'evade_draw':
-        // Status effects — logged only for now; extend when status system lands.
         return { battle, companions };
 
       default:

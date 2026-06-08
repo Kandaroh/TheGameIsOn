@@ -5,6 +5,9 @@ import { GameState } from '../models/game-state';
 import { EventSpawnerService } from '../services/event-spawner.service';
 import { CompanionService } from '../services/companion.service';
 import { BattleService } from '../services/battle.service';
+import { DeckService } from '../services/deck.service';
+import { Companion } from '../models/companion';
+import { Card } from '../models/card';
 
 export class GameController {
   private repository = new StateRepository();
@@ -12,6 +15,7 @@ export class GameController {
   private eventSpawner = new EventSpawnerService();
   private companionService = new CompanionService();
   private battleService = new BattleService();
+  private deckService   = new DeckService();
 
   async getState(req: Request, res: Response) {
     const state = await this.repository.load();
@@ -84,4 +88,44 @@ export class GameController {
     await this.repository.save(updated);
     res.json(updated);
   }
+
+  async battleStart(req: Request, res: Response) {
+    const state   = await this.repository.load();
+    const updated = this.battleService.startBattle(state);
+    await this.repository.save(updated);
+    res.json(updated);
+  }
+
+  async battleDrawCard(req: Request, res: Response) {
+    const state    = await this.repository.load();
+    const drawn    = this.deckService.drawCards(state, 1);
+    const updated  = {
+      ...drawn,
+      battle: drawn.battle
+        ? { ...drawn.battle, log: [...drawn.battle.log, 'Player drew 1 card'] }
+        : drawn.battle,
+      history: [...drawn.history, 'drew a card'],
+    };
+    await this.repository.save(updated);
+    res.json(updated);
+  }
+
+  async finalizeCompanions(req: Request, res: Response) {
+    const state = await this.repository.load();
+    const { companions, baseCards } = req.body as {
+      companions: Companion[];
+      baseCards:  Card[];
+    };
+    const { deck, cards } = this.deckService.buildStartingDeck(baseCards, companions);
+    const updated = {
+      ...state,
+      player:     { ...state.player, deck, hand: [], discard: [] },
+      cards,
+      companions,
+      history: [...state.history, 'Companions finalised � starting deck built'],
+    };
+    await this.repository.save(updated);
+    res.json(updated);
+  }
+
 }

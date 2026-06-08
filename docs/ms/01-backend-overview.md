@@ -25,9 +25,11 @@ backend/src/
 │   ├── map-generator.service.ts
 │   ├── event-spawner.service.ts
 │   ├── companion.service.ts
+│   ├── battle.service.ts     # ← NEW: resolves card plays and enemy turns
 │   └── persistence.service.ts
 ├── repo/
-│   └── state-repo.ts
+│   ├── state-repo.ts
+│   └── card-effect-repo.ts   # ← NEW: reads/caches card-effects.json
 └── models/
     ├── game-state.ts
     ├── player.ts
@@ -36,13 +38,16 @@ backend/src/
     ├── node-event.ts
     ├── card.ts
     ├── companion.ts
-    └── deck.ts
+    ├── deck.ts
+    ├── battle-state.ts       # ← NEW: Enemy + BattleState interfaces
+    └── card-effect.ts        # ← NEW: CardEffect interface
 ```
 
 ## Data persistence
 - State is stored as JSON at `backend/backend-data/game-state.json`.
 - Companion catalogue is stored at `backend/backend-data/companions.json`.
-- Both files are created automatically on first write; if missing on read, defaults are generated in code.
+- Card effect catalogue is stored at `backend/backend-data/card-effects.json` (read-only at runtime; cached in `CardEffectRepository`).
+- All files are created automatically on first write; if missing on read, defaults are generated in code.
 
 ## Scripts
 | Script | Command |

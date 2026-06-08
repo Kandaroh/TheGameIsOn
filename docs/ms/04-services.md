@@ -8,7 +8,7 @@ Central game-rule engine. Stateless; operates on passed-in `GameState` and retur
 ### Methods
 | Method | Signature | Notes |
 |--------|-----------|-------|
-| `createInitialState` | `() → GameState` | Builds 6-card catalogue, calls `MapGeneratorService.generate()`, then `EventSpawnerService.assignEvents()`, sets player at `'start'` with `life:20 mana:3 hand:[strike,shield,focus]` |
+| `createInitialState` | `() → GameState` | Builds 6-card catalogue (with `effectId` / `enhancedEffectId` fields), calls `MapGeneratorService.generate()`, then `EventSpawnerService.assignEvents()`, sets player at `'start'` with `life:20 mana:3 hand:[strike,shield,focus] discard:[] companions:[]` |
 | `movePlayer` | `(state, nextNodeId) → GameState` | Validates that an edge `from:player.position to:nextNodeId` exists. On success updates `player.position`. On failure appends invalid-move log to `history`, state unchanged. |
 | `playCard` | `(state, cardId) → GameState` | Guards: card in `cards`, card in `player.hand`, `card.cost <= player.mana`. On success deducts mana, removes card from hand, pushes to discard. On failure appends error log. |
 
@@ -74,6 +74,44 @@ Loads companion catalogue from `backend-data/companions.json`; falls back to 6 h
 | griffin | utility | 23 | 3 | 2 |
 
 Each companion has `priceDecks: { common[], uncommon[], rare[] }` with companion-specific `Card` entries.
+
+---
+
+## BattleService
+`backend/src/services/battle.service.ts`
+
+Resolves all battle-phase actions against `GameState.battle`. All methods return a new `GameState` (immutable). Injected with `CardEffectRepository` to look up effect data.
+
+### Methods
+
+#### `playCard(state, cardId, companionId, targetIds?) → Promise<GameState>`
+Validation order:
+1. `state.battle.active` must be `true`.
+2. `cardId` must exist in `state.cards` and in `state.player.hand`.
+3. Companion must exist and have `energy >= card.cost`.
+
+On success:
+- Deducts companion energy.
+- Moves card from `hand` to `discard`.
+- Resolves the correct `effectId` / `enhancedEffectId` (enhanced when `card.type === companion.type`) via `CardEffectRepository`.
+- Applies the resolved `CardEffect` to `BattleState` + companions (see effect dispatch table below).
+- Appends to `battle.log` and `history`.
+
+#### `endTurn(state) → GameState`
+1. Refills each companion's `energy` by `energyRefill`, capped at `maxEnergy`.
+2. Each living enemy deals `ENEMY_ATTACK_DAMAGE` (2) to every companion.
+3. Increments `battle.turn`.
+4. Appends to `battle.log` and `history`.
+
+### Effect dispatch table
+| `action` | Behaviour |
+|----------|-----------|
+| `damage` | Reduces `enemy.life` after absorbing through `enemy.shield`; reduces shield first |
+| `shield` | Adds `value` to the acting companion's `shield` |
+| `heal` | Adds `value` to the acting companion's `life`, capped at `maxLife` |
+| `evade` / `evade_draw` | Logged only — status system pending |
+
+When no `targetIds` are supplied for a `damage` action, the first living enemy is targeted automatically.
 
 ---
 

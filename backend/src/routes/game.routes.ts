@@ -14,5 +14,8 @@ router.get('/events', controller.getEvents.bind(controller));
 router.post('/events/validate', controller.validateEvent.bind(controller));
 router.post('/action/battle/play-card', controller.battlePlayCard.bind(controller));
 router.post('/action/battle/end-turn', controller.battleEndTurn.bind(controller));
+router.post('/action/battle/start', controller.battleStart.bind(controller));
+router.post('/action/battle/draw-card', controller.battleDrawCard.bind(controller));
+router.post('/action/finalize-companions', controller.finalizeCompanions.bind(controller));
 
 export { router as gameRouter };

@@ -18,6 +18,8 @@ All routes are defined in `backend/src/routes/game.routes.ts` and handled by `Ga
 | POST | `/api/game/action/move` | `{ nextNodeId: string }` | Move player to adjacent node; validates edge exists |
 | POST | `/api/game/action/play-card` | `{ cardId: string }` | Play a card from hand; validates hand membership and mana |
 | POST | `/api/game/action/new-run` | — | Generate a fresh `GameState` and persist it |
+| POST | `/api/game/action/battle/play-card` | `{ cardId, companionId, targetIds? }` | Play a card in battle via `BattleService`; validates battle active, card in hand, companion energy |
+| POST | `/api/game/action/battle/end-turn` | `{}` | End player turn: refill companion energy then run enemy AI attack pass |
 
 ## Reference data
 
@@ -33,4 +35,5 @@ All routes are defined in `backend/src/routes/game.routes.ts` and handled by `Ga
 - **`/action/new-run`** returns `201` + new `GameState`.
 - **`/state` POST** returns `201 { saved: true }`.
 - **`/events/validate`** returns `{ valid: boolean, reason?: string }`.
-- Errors are not explicitly mapped; invalid moves/cards return the unchanged state with a history entry.
+- **Battle action endpoints** return the full updated `GameState` including the mutated `battle` field.
+- Errors are not explicitly mapped; invalid moves/cards return the unchanged state with a history entry describing the failure.
