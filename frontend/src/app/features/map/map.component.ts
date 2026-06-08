@@ -27,7 +27,7 @@ import { NodeModel } from '../../shared/models/node.model';
               [attr.x2]="getNodeLayout(state, edge.to)?.x"
               [attr.y2]="getNodeLayout(state, edge.to)?.y"
               stroke="#6cabff"
-              stroke-width="1.8"
+              stroke-width="0.4"
               stroke-linecap="round"
             />
           </ng-container>

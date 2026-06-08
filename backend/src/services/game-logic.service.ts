@@ -10,13 +10,40 @@ export class GameLogicService {
   private eventSpawner = new EventSpawnerService();
 
   createInitialState(): GameState {
-    const cards: Card[] = [
-      { id: 'strike', name: 'Strike', cost: 1, type: 'attack', properties: { damage: 3 } },
-      { id: 'shield', name: 'Shield', cost: 1, type: 'defense', properties: { block: 3 } },
-      { id: 'focus', name: 'Focus', cost: 2, type: 'utility', properties: { manaGain: 2 } },
-      { id: 'bash', name: 'Bash', cost: 2, type: 'attack', properties: { damage: 5 } },
-      { id: 'heal', name: 'Heal', cost: 1, type: 'defense', properties: { recover: 2 } },
-      { id: 'charge', name: 'Charge', cost: 1, type: 'utility', properties: { speed: 1 } }
+        const cards: Card[] = [
+      {
+        id: 'strike', name: 'Strike', cost: 1, type: 'attack',
+        properties: { damage: 3 },
+        effectId: 'fx-strike-normal', enhancedEffectId: 'fx-strike-enhanced',
+        effect: { description: 'Deal 3 damage to one enemy.' },
+        enhancedEffect: { description: 'Deal 5 damage to one enemy.' },
+      },
+      {
+        id: 'shield', name: 'Shield', cost: 1, type: 'defense',
+        properties: { block: 3 },
+        effectId: 'fx-shield-normal', enhancedEffectId: 'fx-shield-enhanced',
+        effect: { description: 'Gain 2 shield.' },
+        enhancedEffect: { description: 'Gain 4 shield.' },
+      },
+      {
+        id: 'focus', name: 'Focus', cost: 2, type: 'utility',
+        properties: { manaGain: 2 },
+      },
+      {
+        id: 'bash', name: 'Bash', cost: 2, type: 'attack',
+        properties: { damage: 5 },
+        effectId: 'fx-strike-enhanced', enhancedEffectId: 'fx-comp-strike-enhanced',
+        effect: { description: 'Deal 5 damage to one enemy.' },
+        enhancedEffect: { description: 'Deal 6 damage to one enemy.' },
+      },
+      {
+        id: 'heal', name: 'Heal', cost: 1, type: 'defense',
+        properties: { recover: 2 },
+      },
+      {
+        id: 'charge', name: 'Charge', cost: 1, type: 'utility',
+        properties: { speed: 1 },
+      },
     ];
 
     const graph = this.mapGenerator.generate({ minNodes: 20, maxNodes: 24, minLayers: 5, maxLayers: 7 });
@@ -31,10 +58,12 @@ export class GameLogicService {
         mana: 3,
         deck,
         hand: ['strike', 'shield', 'focus'],
+        discard: [],
         position: 'start'
       },
       graph,
       cards,
+      companions: [],
       history: ['New run created']
     };
   }
@@ -59,12 +88,15 @@ export class GameLogicService {
     }
 
     const remainingHand = state.player.hand.filter(id => id !== cardId);
+    const discard = [...(state.player.discard ?? []), cardId];
+
     return {
       ...state,
       player: {
         ...state.player,
         mana: state.player.mana - card.cost,
-        hand: remainingHand
+        hand: remainingHand,
+        discard
       },
       history: [...state.history, `played ${card.name}`]
     };

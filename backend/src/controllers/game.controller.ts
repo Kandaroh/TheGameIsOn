@@ -3,11 +3,15 @@ import { GameLogicService } from '../services/game-logic.service';
 import { StateRepository } from '../repo/state-repo';
 import { GameState } from '../models/game-state';
 import { EventSpawnerService } from '../services/event-spawner.service';
+import { CompanionService } from '../services/companion.service';
+import { BattleService } from '../services/battle.service';
 
 export class GameController {
   private repository = new StateRepository();
   private gameLogic = new GameLogicService();
   private eventSpawner = new EventSpawnerService();
+  private companionService = new CompanionService();
+  private battleService = new BattleService();
 
   async getState(req: Request, res: Response) {
     const state = await this.repository.load();
@@ -42,13 +46,42 @@ export class GameController {
     res.status(201).json(state);
   }
 
+  async getCompanions(req: Request, res: Response) {
+    const companions = await this.companionService.getAll();
+    res.json(companions);
+  }
+
   async getEvents(req: Request, res: Response) {
     res.json(this.eventSpawner.getSpecs());
   }
 
-  async validateEvent(req: Request, res: Response) {
+    async validateEvent(req: Request, res: Response) {
     const body = req.body as { eventType: string; count: number };
     const result = this.eventSpawner.validateCount(body.eventType, Number(body.count));
     res.json(result);
+  }
+
+  async battlePlayCard(req: Request, res: Response) {
+    const state = await this.repository.load();
+    const { cardId, companionId, targetIds } = req.body as {
+      cardId: string;
+      companionId: string;
+      targetIds?: string[];
+    };
+    const updated = await this.battleService.playCard(
+      state,
+      String(cardId),
+      String(companionId),
+      targetIds
+    );
+    await this.repository.save(updated);
+    res.json(updated);
+  }
+
+  async battleEndTurn(req: Request, res: Response) {
+    const state = await this.repository.load();
+    const updated = this.battleService.endTurn(state);
+    await this.repository.save(updated);
+    res.json(updated);
   }
 }

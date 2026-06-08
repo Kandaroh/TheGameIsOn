@@ -9,7 +9,10 @@ router.post('/state', controller.saveState.bind(controller));
 router.post('/action/move', controller.movePlayer.bind(controller));
 router.post('/action/play-card', controller.playCard.bind(controller));
 router.post('/action/new-run', controller.resetGame.bind(controller));
+router.get('/action/companions', controller.getCompanions.bind(controller));
 router.get('/events', controller.getEvents.bind(controller));
 router.post('/events/validate', controller.validateEvent.bind(controller));
+router.post('/action/battle/play-card', controller.battlePlayCard.bind(controller));
+router.post('/action/battle/end-turn', controller.battleEndTurn.bind(controller));
 
 export { router as gameRouter };

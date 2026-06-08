@@ -5,20 +5,21 @@
     "mana": 3,
     "deck": {
       "cardIds": [
-        "strike",
-        "shield",
-        "focus",
-        "bash",
-        "heal",
-        "charge"
+        "comp-sprite-1-1-a",
+        "comp-sprite-1-1-b",
+        "comp-griffin-2-2-a",
+        "comp-griffin-2-2-b"
       ]
     },
     "hand": [
       "strike",
       "shield",
-      "focus"
+      "dodge",
+      "comp-sprite-0-0-a",
+      "comp-sprite-0-0-b"
     ],
-    "position": "start"
+    "discard": [],
+    "position": "node-10"
   },
   "graph": {
     "nodes": [
@@ -40,7 +41,7 @@
         "icon": "⚔️",
         "layout": {
           "x": 15,
-          "y": 25
+          "y": 17
         },
         "event": {
           "type": "hard battle"
@@ -51,23 +52,23 @@
         "title": "Battle 3",
         "icon": "⚔️",
         "layout": {
-          "x": 26.666666666666664,
-          "y": 25
+          "x": 38.33333333333333,
+          "y": 17
         },
         "event": {
-          "type": "hard battle"
+          "type": "new object"
         }
       },
       {
         "id": "node-3",
-        "title": "Rest 4",
-        "icon": "🛌",
+        "title": "Battle 4",
+        "icon": "⚔️",
         "layout": {
-          "x": 38.33333333333333,
-          "y": 25
+          "x": 61.666666666666664,
+          "y": 17
         },
         "event": {
-          "type": "new object"
+          "type": "power up"
         }
       },
       {
@@ -75,8 +76,8 @@
         "title": "Treasure 5",
         "icon": "🎁",
         "layout": {
-          "x": 50,
-          "y": 25
+          "x": 85,
+          "y": 17
         },
         "event": {
           "type": "treasure"
@@ -84,43 +85,55 @@
       },
       {
         "id": "node-5",
-        "title": "Battle 6",
-        "icon": "⚔️",
+        "title": "New Object 6",
+        "icon": "🪄",
         "layout": {
-          "x": 61.666666666666664,
-          "y": 25
+          "x": 15,
+          "y": 33
         },
         "event": {
-          "type": "power up"
+          "type": "new object"
         }
       },
       {
         "id": "node-6",
-        "title": "Battle 7",
-        "icon": "⚔️",
-        "layout": {
-          "x": 73.33333333333334,
-          "y": 25
-        },
-        "event": {
-          "type": "power up"
-        }
-      },
-      {
-        "id": "node-7",
-        "title": "Treasure 8",
+        "title": "Treasure 7",
         "icon": "🎁",
         "layout": {
-          "x": 85,
-          "y": 25
+          "x": 38.33333333333333,
+          "y": 33
         },
         "event": {
           "type": "treasure"
         }
       },
       {
+        "id": "node-7",
+        "title": "Battle 8",
+        "icon": "⚔️",
+        "layout": {
+          "x": 61.666666666666664,
+          "y": 33
+        },
+        "event": {
+          "type": "power up"
+        }
+      },
+      {
         "id": "node-8",
         "title": "Battle 9",
+        "icon": "⚔️",
+        "layout": {
+          "x": 85,
+          "y": 33
+        },
+        "event": {
+          "type": "battle"
+        }
+      },
+      {
+        "id": "node-9",
+        "title": "Battle 10",
         "icon": "⚔️",
         "layout": {
           "x": 15,
@@ -131,21 +144,9 @@
         }
       },
       {
-        "id": "node-9",
-        "title": "Treasure 10",
-        "icon": "🎁",
-        "layout": {
-          "x": 26.666666666666664,
-          "y": 50
-        },
-        "event": {
-          "type": "treasure"
-        }
-      },
-      {
         "id": "node-10",
-        "title": "Rest 11",
-        "icon": "🛌",
+        "title": "Battle 11",
+        "icon": "⚔️",
         "layout": {
           "x": 38.33333333333333,
           "y": 50
@@ -159,7 +160,7 @@
         "title": "Battle 12",
         "icon": "⚔️",
         "layout": {
-          "x": 50,
+          "x": 61.666666666666664,
           "y": 50
         },
         "event": {
@@ -168,38 +169,38 @@
       },
       {
         "id": "node-12",
-        "title": "Treasure 13",
+        "title": "Rest 13",
+        "icon": "🛌",
+        "layout": {
+          "x": 85,
+          "y": 50
+        },
+        "event": {
+          "type": "rest"
+        }
+      },
+      {
+        "id": "node-13",
+        "title": "Treasure 14",
         "icon": "🎁",
         "layout": {
-          "x": 61.666666666666664,
-          "y": 50
+          "x": 15,
+          "y": 67
         },
         "event": {
           "type": "treasure"
         }
       },
       {
-        "id": "node-13",
-        "title": "Battle 14",
+        "id": "node-14",
+        "title": "Battle 15",
         "icon": "⚔️",
         "layout": {
-          "x": 73.33333333333334,
-          "y": 50
+          "x": 50,
+          "y": 67
         },
         "event": {
           "type": "battle"
-        }
-      },
-      {
-        "id": "node-14",
-        "title": "Power Up 15",
-        "icon": "⚡",
-        "layout": {
-          "x": 85,
-          "y": 50
-        },
-        "event": {
-          "type": "power up"
         }
       },
       {
@@ -207,8 +208,8 @@
         "title": "Battle 16",
         "icon": "⚔️",
         "layout": {
-          "x": 15,
-          "y": 75
+          "x": 85,
+          "y": 67
         },
         "event": {
           "type": "battle"
@@ -216,62 +217,38 @@
       },
       {
         "id": "node-16",
-        "title": "Battle 17",
-        "icon": "⚔️",
+        "title": "Hard Battle 17",
+        "icon": "💀",
         "layout": {
-          "x": 29,
-          "y": 75
+          "x": 15,
+          "y": 83
         },
         "event": {
-          "type": "battle"
+          "type": "hard battle"
         }
       },
       {
         "id": "node-17",
-        "title": "Rest 18",
-        "icon": "🛌",
+        "title": "Treasure 18",
+        "icon": "🎁",
         "layout": {
-          "x": 43,
-          "y": 75
+          "x": 50,
+          "y": 83
         },
         "event": {
-          "type": "rest"
+          "type": "treasure"
         }
       },
       {
         "id": "node-18",
-        "title": "New Object 19",
-        "icon": "🪄",
-        "layout": {
-          "x": 57,
-          "y": 75
-        },
-        "event": {
-          "type": "new object"
-        }
-      },
-      {
-        "id": "node-19",
-        "title": "Rest 20",
-        "icon": "🛌",
-        "layout": {
-          "x": 71,
-          "y": 75
-        },
-        "event": {
-          "type": "rest"
-        }
-      },
-      {
-        "id": "node-20",
-        "title": "Battle 21",
-        "icon": "⚔️",
+        "title": "Power Up 19",
+        "icon": "⚡",
         "layout": {
           "x": 85,
-          "y": 75
+          "y": 83
         },
         "event": {
-          "type": "battle"
+          "type": "power up"
         }
       },
       {
@@ -290,15 +267,7 @@
     "edges": [
       {
         "from": "start",
-        "to": "node-4"
-      },
-      {
-        "from": "start",
-        "to": "node-5"
-      },
-      {
-        "from": "start",
-        "to": "node-1"
+        "to": "node-3"
       },
       {
         "from": "start",
@@ -306,131 +275,131 @@
       },
       {
         "from": "start",
-        "to": "node-3"
+        "to": "node-1"
       },
       {
         "from": "start",
+        "to": "node-4"
+      },
+      {
+        "from": "node-1",
+        "to": "node-5"
+      },
+      {
+        "from": "node-1",
         "to": "node-6"
       },
       {
-        "from": "start",
+        "from": "node-2",
+        "to": "node-6"
+      },
+      {
+        "from": "node-2",
+        "to": "node-5"
+      },
+      {
+        "from": "node-3",
         "to": "node-7"
       },
       {
-        "from": "node-1",
-        "to": "node-8"
-      },
-      {
-        "from": "node-1",
-        "to": "node-9"
-      },
-      {
-        "from": "node-2",
-        "to": "node-9"
-      },
-      {
-        "from": "node-2",
-        "to": "node-8"
-      },
-      {
         "from": "node-3",
+        "to": "node-6"
+      },
+      {
+        "from": "node-4",
+        "to": "node-8"
+      },
+      {
+        "from": "node-4",
+        "to": "node-7"
+      },
+      {
+        "from": "node-5",
+        "to": "node-9"
+      },
+      {
+        "from": "node-5",
         "to": "node-10"
       },
       {
-        "from": "node-3",
+        "from": "node-6",
+        "to": "node-10"
+      },
+      {
+        "from": "node-6",
         "to": "node-9"
       },
       {
-        "from": "node-4",
+        "from": "node-7",
         "to": "node-11"
       },
       {
-        "from": "node-4",
+        "from": "node-7",
+        "to": "node-10"
+      },
+      {
+        "from": "node-8",
         "to": "node-12"
       },
       {
-        "from": "node-5",
-        "to": "node-12"
-      },
-      {
-        "from": "node-5",
+        "from": "node-8",
         "to": "node-11"
       },
       {
-        "from": "node-6",
+        "from": "node-9",
         "to": "node-13"
       },
       {
-        "from": "node-6",
+        "from": "node-9",
         "to": "node-14"
       },
       {
-        "from": "node-7",
+        "from": "node-10",
         "to": "node-14"
       },
       {
-        "from": "node-7",
+        "from": "node-10",
         "to": "node-13"
       },
       {
-        "from": "node-8",
-        "to": "node-15"
-      },
-      {
-        "from": "node-8",
-        "to": "node-16"
-      },
-      {
-        "from": "node-9",
-        "to": "node-16"
-      },
-      {
-        "from": "node-9",
-        "to": "node-15"
-      },
-      {
-        "from": "node-10",
-        "to": "node-17"
-      },
-      {
-        "from": "node-10",
-        "to": "node-16"
+        "from": "node-11",
+        "to": "node-14"
       },
       {
         "from": "node-11",
+        "to": "node-15"
+      },
+      {
+        "from": "node-12",
+        "to": "node-15"
+      },
+      {
+        "from": "node-12",
+        "to": "node-14"
+      },
+      {
+        "from": "node-13",
+        "to": "node-16"
+      },
+      {
+        "from": "node-13",
         "to": "node-17"
       },
       {
-        "from": "node-11",
-        "to": "node-18"
-      },
-      {
-        "from": "node-12",
-        "to": "node-18"
-      },
-      {
-        "from": "node-12",
-        "to": "node-19"
-      },
-      {
-        "from": "node-13",
-        "to": "node-19"
-      },
-      {
-        "from": "node-13",
-        "to": "node-20"
+        "from": "node-14",
+        "to": "node-17"
       },
       {
         "from": "node-14",
-        "to": "node-20"
-      },
-      {
-        "from": "node-14",
-        "to": "node-19"
+        "to": "node-16"
       },
       {
         "from": "node-15",
-        "to": "end"
+        "to": "node-18"
+      },
+      {
+        "from": "node-15",
+        "to": "node-17"
       },
       {
         "from": "node-16",
@@ -445,24 +414,20 @@
         "to": "end"
       },
       {
-        "from": "node-19",
-        "to": "end"
-      },
-      {
-        "from": "node-20",
-        "to": "end"
-      },
-      {
-        "from": "start",
-        "to": "node-11"
-      },
-      {
         "from": "node-1",
-        "to": "node-15"
+        "to": "node-9"
       },
       {
-        "from": "node-5",
+        "from": "node-6",
+        "to": "node-14"
+      },
+      {
+        "from": "node-12",
         "to": "node-18"
+      },
+      {
+        "from": "node-15",
+        "to": "end"
       }
     ]
   },
@@ -472,57 +437,243 @@
       "name": "Strike",
       "cost": 1,
       "type": "attack",
-      "properties": {
-        "damage": 3
-      }
+      "description": "Basic attack"
     },
     {
       "id": "shield",
       "name": "Shield",
       "cost": 1,
       "type": "defense",
-      "properties": {
-        "block": 3
-      }
+      "description": "Basic shield"
     },
     {
-      "id": "focus",
-      "name": "Focus",
-      "cost": 2,
+      "id": "dodge",
+      "name": "Dodge",
+      "cost": 0,
       "type": "utility",
-      "properties": {
-        "manaGain": 2
-      }
+      "description": "Avoid"
     },
     {
-      "id": "bash",
-      "name": "Bash",
-      "cost": 2,
-      "type": "attack",
-      "properties": {
-        "damage": 5
-      }
+      "id": "comp-sprite-0-0-a",
+      "name": "Sprite Strike",
+      "cost": 1,
+      "type": "utility",
+      "description": "Companion basic attack"
     },
     {
-      "id": "heal",
-      "name": "Heal",
+      "id": "comp-sprite-0-0-b",
+      "name": "Sprite Guard",
       "cost": 1,
       "type": "defense",
-      "properties": {
-        "recover": 2
-      }
+      "description": "Companion basic defence"
     },
     {
-      "id": "charge",
-      "name": "Charge",
+      "id": "comp-sprite-1-1-a",
+      "name": "Sprite Strike",
       "cost": 1,
       "type": "utility",
-      "properties": {
-        "speed": 1
-      }
+      "description": "Companion basic attack"
+    },
+    {
+      "id": "comp-sprite-1-1-b",
+      "name": "Sprite Guard",
+      "cost": 1,
+      "type": "defense",
+      "description": "Companion basic defence"
+    },
+    {
+      "id": "comp-griffin-2-2-a",
+      "name": "Griffin Strike",
+      "cost": 1,
+      "type": "utility",
+      "description": "Companion basic attack"
+    },
+    {
+      "id": "comp-griffin-2-2-b",
+      "name": "Griffin Guard",
+      "cost": 1,
+      "type": "defense",
+      "description": "Companion basic defence"
+    }
+  ],
+  "companions": [
+    {
+      "id": "sprite-0",
+      "name": "Sprite",
+      "type": "utility",
+      "element": "water",
+      "life": 20,
+      "energy": 4,
+      "energyRefill": 2,
+      "priceDecks": {
+        "common": [
+          {
+            "id": "sprite-dash",
+            "name": "Quick Dash",
+            "cost": 1,
+            "type": "utility",
+            "properties": {
+              "move": 1
+            },
+            "element": "water"
+          },
+          {
+            "id": "sprite-gale",
+            "name": "Breeze",
+            "cost": 1,
+            "type": "utility",
+            "properties": {
+              "draw": 1
+            },
+            "element": "water"
+          }
+        ],
+        "uncommon": [
+          {
+            "id": "sprite-splash",
+            "name": "Aqua Puff",
+            "cost": 2,
+            "type": "defense",
+            "properties": {
+              "shield": 5
+            },
+            "element": "water"
+          }
+        ],
+        "rare": [
+          {
+            "id": "sprite-starlight",
+            "name": "Starlight",
+            "cost": 3,
+            "type": "utility",
+            "properties": {
+              "heal": 4
+            },
+            "element": "water"
+          }
+        ]
+      },
+      "maxEnergy": 4,
+      "maxLife": 20
+    },
+    {
+      "id": "sprite-1",
+      "name": "Sprite",
+      "type": "utility",
+      "element": "water",
+      "life": 20,
+      "energy": 4,
+      "energyRefill": 2,
+      "priceDecks": {
+        "common": [
+          {
+            "id": "sprite-dash",
+            "name": "Quick Dash",
+            "cost": 1,
+            "type": "utility",
+            "properties": {
+              "move": 1
+            },
+            "element": "water"
+          },
+          {
+            "id": "sprite-gale",
+            "name": "Breeze",
+            "cost": 1,
+            "type": "utility",
+            "properties": {
+              "draw": 1
+            },
+            "element": "water"
+          }
+        ],
+        "uncommon": [
+          {
+            "id": "sprite-splash",
+            "name": "Aqua Puff",
+            "cost": 2,
+            "type": "defense",
+            "properties": {
+              "shield": 5
+            },
+            "element": "water"
+          }
+        ],
+        "rare": [
+          {
+            "id": "sprite-starlight",
+            "name": "Starlight",
+            "cost": 3,
+            "type": "utility",
+            "properties": {
+              "heal": 4
+            },
+            "element": "water"
+          }
+        ]
+      },
+      "maxEnergy": 4,
+      "maxLife": 20
+    },
+    {
+      "id": "griffin-2",
+      "name": "Griffin",
+      "type": "utility",
+      "life": 23,
+      "energy": 3,
+      "energyRefill": 2,
+      "priceDecks": {
+        "common": [
+          {
+            "id": "griffin-glide",
+            "name": "Sky Glide",
+            "cost": 1,
+            "type": "utility",
+            "properties": {
+              "evade": 1
+            }
+          },
+          {
+            "id": "griffin-screech",
+            "name": "Screech",
+            "cost": 1,
+            "type": "utility",
+            "properties": {
+              "debuff": true
+            }
+          }
+        ],
+        "uncommon": [
+          {
+            "id": "griffin-strike",
+            "name": "Aerial Strike",
+            "cost": 2,
+            "type": "attack",
+            "properties": {
+              "damage": 5
+            }
+          }
+        ],
+        "rare": [
+          {
+            "id": "griffin-gale",
+            "name": "Gale Force",
+            "cost": 3,
+            "type": "utility",
+            "properties": {
+              "draw": 2
+            }
+          }
+        ]
+      },
+      "maxEnergy": 3,
+      "maxLife": 23
     }
   ],
   "history": [
-    "New run created"
+    "New run created",
+    "moved to node-3",
+    "moved to node-7",
+    "moved to node-10"
   ]
 }

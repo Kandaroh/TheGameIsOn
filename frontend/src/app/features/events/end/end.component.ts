@@ -5,7 +5,6 @@ import { GameStateService } from '../../../shared/services/game-state.service';
   selector: 'app-end',
   template: `
     <div class="event-screen">
-      <button class="back-button" (click)="goBack()" aria-label="Back to map">← Back</button>
       <header>
         <h2>End</h2>
         <div class="event-icon">🏁</div>

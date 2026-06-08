@@ -6,5 +6,6 @@ export interface Player {
   mana: number;
   deck: Deck;
   hand: string[];
+  discard: string[];
   position: string;
 }
