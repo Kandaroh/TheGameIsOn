@@ -10,6 +10,7 @@ import { DeckService } from '../services/deck.service';
 import { Companion } from '../models/companion';
 import { Card } from '../models/card';
 import { LevelingService } from '../services/leveling.service';
+import { BaseCardRepository } from '../repo/base-card-repo';
 
 export class GameController {
   private repository = new StateRepository();
@@ -20,6 +21,7 @@ export class GameController {
   private deckService   = new DeckService();
   private eventRepo     = new EventRepository();
   private leveling      = new LevelingService();
+  private baseCardRepo  = new BaseCardRepository();
 
   async getState(req: Request, res: Response) {
     const state = await this.repository.load();
@@ -120,12 +122,13 @@ export class GameController {
     res.json(updated);
   }
 
-    async finalizeCompanions(req: Request, res: Response) {
+        async finalizeCompanions(req: Request, res: Response) {
     const state = await this.repository.load();
-    const { companions, baseCards } = req.body as {
+    const { companions } = req.body as {
       companions: Companion[];
-      baseCards:  Card[];
     };
+    // Base cards are owned by the backend — never sent from the client.
+    const baseCards = await this.baseCardRepo.getAll();
     const { deck, cards } = this.deckService.buildStartingDeck(baseCards, companions);
         // Stamp nextLevelExp on each companion so the frontend never needs the formula.
     const stampedCompanions = companions.map(c => this.leveling.withNextLevelExp(c));

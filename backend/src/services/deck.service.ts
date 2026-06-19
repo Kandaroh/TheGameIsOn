@@ -84,12 +84,15 @@ export class DeckService {
     const cards: Card[] = baseCards.slice();
 
     companions.forEach((companion, idx) => {
-      // Attack-type starter card
+      const companionElement = companion.element ?? 'neutral';
+
+      // Attack-type starter card — inherits the companion's element
       cards.push({
         id:              `comp-${companion.id}-${idx}-a`,
         name:            `${companion.name} Strike`,
         cost:            1,
         type:            companion.type,
+        element:         companionElement,
         description:     'Companion basic attack',
         effectId:        'fx-comp-strike-normal',
         enhancedEffectId:'fx-comp-strike-enhanced',
@@ -97,12 +100,13 @@ export class DeckService {
         enhancedEffect:  { description: 'Deal 6 damage to one enemy.' },
       });
 
-      // Defence starter card
+      // Defence starter card — inherits the companion's element
       cards.push({
         id:              `comp-${companion.id}-${idx}-b`,
         name:            `${companion.name} Guard`,
         cost:            1,
         type:            'defense',
+        element:         companionElement,
         description:     'Companion basic defence',
         effectId:        'fx-comp-guard-normal',
         enhancedEffectId:'fx-comp-guard-enhanced',

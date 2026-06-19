@@ -4,7 +4,8 @@ export type CardEffectAction =
   | 'evade'
   | 'evade_draw'
   | 'heal'
-  | 'draw';
+  | 'draw'
+  | 'apply_status';
 
 export type CardEffectTarget = 'wildMonster' | 'companion' | 'deck' | 'discard';
 
@@ -14,4 +15,6 @@ export interface CardEffect {
   action: CardEffectAction;
   value: number;
   target: CardEffectTarget;
+  /** Status effect id to apply (only used when action === 'apply_status'). */
+  statusId?: string;
 }

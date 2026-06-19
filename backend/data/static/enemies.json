@@ -60,7 +60,17 @@
         "targeting": "companion",
         "targetNumber": 1,
         "effectId": "fx-enemy-bite",
-        "selectionChance": 0.8
+        "selectionChance": 0.5
+      },
+      {
+        "id": "forest-spider-venom",
+        "name": "Venom Spit",
+        "type": "attack",
+        "element": "earth",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-poison-apply-2",
+        "selectionChance": 0.3
       },
       {
         "id": "forest-spider-web",

@@ -17,6 +17,7 @@ export type EffectTarget = Companion | BattleEnemy;
  * - 'heal'       : restore HP to source companion up to maxLife.
  * - 'evade'      : no-op stub (future use).
  * - 'evade_draw' : no-op stub (future use).
+ * - 'apply_status': no-op here — resolved by StatusEffectService via BattleService.
  *
  * All methods return a new GameState — no in-place mutations.
  */
@@ -31,6 +32,7 @@ export class CardEffectService {
       case 'damage':    return this.applyDamage(effect.value, source, targets, state);
       case 'shield':    return this.applyShield(effect.value, source, state);
       case 'heal':      return this.applyHeal(effect.value, source, state);
+      case 'apply_status':  // Handled async by StatusEffectService in BattleService
       case 'evade':
       case 'evade_draw':
       default:

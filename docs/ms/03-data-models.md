@@ -75,7 +75,7 @@ interface Card {
   targetNumber?: CardTargetNumber;
   properties?: Record<string, unknown>; // e.g. { damage:3 }, { block:4 }
   effectId?: string;          // key into card-effects.json for normal play
-  enhancedEffectId?: string;  // key into card-effects.json for type-match bonus
+  enhancedEffectId?: string;  // key into card-effects.json for element-match bonus
   effect?: CardEffectRef;     // inline display text (mirrors CardEffect.description)
   enhancedEffect?: CardEffectRef;
 }

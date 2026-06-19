@@ -406,10 +406,11 @@ export class BattleComponent implements OnInit, OnDestroy {
         unlocked: true,
       })),
       nextUnlockLevel: nextUnlock,
-      statusEffects: (companion.statusEffects ?? []).map(s => ({
+            statusEffects: (companion.statusEffects ?? []).map(s => ({
         id: s.id,
         name: s.name,
-        icon: this.statusIcon(s.id),
+        icon: s.icon || this.statusIcon(s.id),
+        stacks: s.stacks,
         turnsRemaining: s.turnsRemaining,
       })),
     };
@@ -436,10 +437,11 @@ export class BattleComponent implements OnInit, OnDestroy {
         description: a.description,
         element: a.element,
       })),
-      statusEffects: (enemy.statusEffects ?? []).map(s => ({
+            statusEffects: (enemy.statusEffects ?? []).map(s => ({
         id: s.id,
         name: s.name,
-        icon: this.statusIcon(s.id),
+        icon: s.icon || this.statusIcon(s.id),
+        stacks: s.stacks,
         turnsRemaining: s.turnsRemaining,
       })),
     };

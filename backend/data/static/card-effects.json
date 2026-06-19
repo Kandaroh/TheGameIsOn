@@ -132,5 +132,8 @@
   {"id": "fx-sky-dodge",      "description": "15% chance to evade any attack.",                     "action": "damage", "value": 0, "target": "companion"},
   {"id": "fx-keen-eye",       "description": "Draw 1 extra card when playing a utility card.",      "action": "damage", "value": 0, "target": "companion"},
   {"id": "fx-gust-shield",    "description": "Air cards grant 2 shield.",                           "action": "damage", "value": 0, "target": "companion"},
-  {"id": "fx-updraft",        "description": "Heal 2 HP when playing a utility card.",              "action": "damage", "value": 0, "target": "companion"}
+  {"id": "fx-updraft",        "description": "Heal 2 HP when playing a utility card.",              "action": "damage", "value": 0, "target": "companion"},
+
+  {"id": "fx-poison-apply-2",  "description": "Apply 2 stacks of Poison.",                          "action": "apply_status", "value": 2, "target": "companion", "statusId": "poison"},
+  {"id": "fx-poison-tick",     "description": "Poison deals damage equal to current stacks.",       "action": "damage", "value": 0, "target": "companion"}
 ]

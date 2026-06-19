@@ -1,0 +1,38 @@
+[
+  {
+    "id": "strike",
+    "name": "Strike",
+    "cost": 1,
+    "type": "attack",
+    "element": "neutral",
+    "description": "Basic attack",
+    "effectId": "fx-strike-normal",
+    "enhancedEffectId": "fx-strike-enhanced",
+    "effect":         { "description": "Deal 3 damage to one enemy." },
+    "enhancedEffect": { "description": "Deal 5 damage to one enemy." }
+  },
+  {
+    "id": "shield",
+    "name": "Shield",
+    "cost": 1,
+    "type": "defense",
+    "element": "neutral",
+    "description": "Basic shield",
+    "effectId": "fx-shield-normal",
+    "enhancedEffectId": "fx-shield-enhanced",
+    "effect":         { "description": "Gain 2 shield." },
+    "enhancedEffect": { "description": "Gain 4 shield." }
+  },
+  {
+    "id": "dodge",
+    "name": "Dodge",
+    "cost": 0,
+    "type": "utility",
+    "element": "neutral",
+    "description": "Avoid",
+    "effectId": "fx-dodge-normal",
+    "enhancedEffectId": "fx-dodge-enhanced",
+    "effect":         { "description": "Evade the next attack." },
+    "enhancedEffect": { "description": "Evade the next attack and draw 1 card." }
+  }
+]

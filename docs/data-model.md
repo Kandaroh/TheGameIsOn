@@ -46,7 +46,7 @@ Every interface listed here is defined in `backend/src/models/` and mirrored in 
 | `id` | `string` | Unique within a run |
 | `name` | `string` | |
 | `cost` | `number` | Energy cost to play |
-| `type` | `'attack' \| 'defense' \| 'utility'` | Matches companion type for enhancement |
+| `type` | `'attack' \| 'defense' \| 'utility'` | Card category |
 | `element?` | `CardElement` | `fire \| water \| earth \| air \| arcane \| shadow \| light \| neutral` |
 | `description?` | `string` | |
 | `sprite?` | `string` | Image URL |
@@ -54,7 +54,7 @@ Every interface listed here is defined in `backend/src/models/` and mirrored in 
 | `targetNumber?` | `CardTargetNumber` | `1 \| 2 \| 'ALL'` |
 | `properties?` | `Record<string, unknown>` | Legacy catch-all |
 | `effectId?` | `string` | Points to `CardEffect` in `card-effects.json` |
-| `enhancedEffectId?` | `string` | Enhanced variant when `card.type === companion.type` |
+| `enhancedEffectId?` | `string` | Enhanced variant when `card.element === companion.element` (neither `'neutral'`) |
 | `effect?` | `CardEffectRef` | `{ description: string }` — display only |
 | `enhancedEffect?` | `CardEffectRef` | Display only |
 

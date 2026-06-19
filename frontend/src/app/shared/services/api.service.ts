@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GameStateModel } from '../models/game-state.model';
-import { CardModel } from '../models/card.model';
 import { CompanionModel } from '../models/companion.model';
 
 const API_BASE = 'http://localhost:4000/api/game';
@@ -54,9 +53,9 @@ export class ApiService {
     return this.http.post<GameStateModel>(`${API_BASE}/action/battle/draw-card`, {});
   }
 
-    finalizeCompanions(companions: CompanionModel[], baseCards: CardModel[]) {
-    return this.http.post<GameStateModel>(`${API_BASE}/action/finalize-companions`, { companions, baseCards });
-  }
+    finalizeCompanions(companions: CompanionModel[]) {
+      return this.http.post<GameStateModel>(`${API_BASE}/action/finalize-companions`, { companions });
+    }
 
   battleEnd() {
     return this.http.post<GameStateModel>(`${API_BASE}/action/battle/end`, {});

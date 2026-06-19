@@ -1,0 +1,11 @@
+[
+  {
+    "id": "poison",
+    "name": "Poison",
+    "icon": "\u2620\uFE0F",
+    "triggerMoment": "turnEnd",
+    "tickEffectId": "fx-poison-tick",
+    "decayPerTick": 1,
+    "description": "At end of turn, take damage equal to stack count. Stacks decrease by 1 each turn."
+  }
+]

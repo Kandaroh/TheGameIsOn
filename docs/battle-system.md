@@ -34,7 +34,7 @@ Source files:
 │  │ playCard  (POST /action/battle/play-card)             │  │
 │  │  → Validate: battle active, card in hand, energy ≥    │  │
 │  │  → Deduct energy, move card hand → discard            │  │
-│  │  → Resolve effect (enhanced if card.type == comp.type)│  │
+│  │  → Resolve effect (enhanced if card.element matches) │  │
 │  │  → CardEffectService.apply(effect, source, targets)   │  │
 │  │  → If all enemies dead → collectRewards()             │  │
 │  └───────────────────────────────────────────────────────┘  │
@@ -85,7 +85,7 @@ playCard(state, cardId, companionId, targetIds?)
   ├─ Move card: hand → discard
   │
   ├─ Determine enhancement:
-  │    enhanced = (card.type === companion.type)
+  │    enhanced = (card.element !== 'neutral' && card.element === companion.element)
   │    effectId = enhanced ? card.enhancedEffectId : card.effectId
   │
   ├─ Load CardEffect from CardEffectRepository

@@ -5,7 +5,6 @@ import { ApiService } from './api.service';
 import { GameStateModel, PendingAbilityChoice } from '../models/game-state.model';
 import { NodeModel } from '../models/node.model';
 import { CompanionModel } from '../models/companion.model';
-import { CardModel } from '../models/card.model';
 import { EnemyTurnAction } from '../models/battle-state.model';
 
 export type GameScreen =
@@ -129,9 +128,10 @@ export class GameStateService {
   }
 
   /**
-   * Send the chosen companions + base cards to the backend.
-   * The backend builds the starting deck, stamps unique companion IDs,
-   * and returns the ready-to-play GameState.
+   * Send the chosen companions to the backend.
+   * The backend loads base cards from its own repository, builds the starting
+   * deck (base cards + companion-specific starter cards), stamps unique
+   * companion IDs, and returns the ready-to-play GameState.
    */
   private finalizeCompanions() {
     // Stamp unique runtime IDs and snapshot energy/life maxima before sending.
@@ -142,30 +142,7 @@ export class GameStateService {
       maxLife:   c.maxLife   ?? c.life,
     }));
 
-    // The base cards carry display text + effectIds; the backend assembles the
-    // full deck from these plus companion-specific starter cards.
-    const baseCards: CardModel[] = [
-      {
-        id: 'strike', name: 'Strike', cost: 1, type: 'attack', description: 'Basic attack',
-        effectId: 'fx-strike-normal', enhancedEffectId: 'fx-strike-enhanced',
-        effect:         { description: 'Deal 3 damage to one enemy.' },
-        enhancedEffect: { description: 'Deal 5 damage to one enemy.' },
-      },
-      {
-        id: 'shield', name: 'Shield', cost: 1, type: 'defense', description: 'Basic shield',
-        effectId: 'fx-shield-normal', enhancedEffectId: 'fx-shield-enhanced',
-        effect:         { description: 'Gain 2 shield.' },
-        enhancedEffect: { description: 'Gain 4 shield.' },
-      },
-      {
-        id: 'dodge', name: 'Dodge', cost: 0, type: 'utility', description: 'Avoid',
-        effectId: 'fx-dodge-normal', enhancedEffectId: 'fx-dodge-enhanced',
-        effect:         { description: 'Evade the next attack.' },
-        enhancedEffect: { description: 'Evade the next attack and draw 1 card.' },
-      },
-    ];
-
-    this.api.finalizeCompanions(uniqueCompanions, baseCards).subscribe(state => {
+    this.api.finalizeCompanions(uniqueCompanions).subscribe(state => {
       this.state$.next(state);
       this.currentCompanionOptions = [];
       this.setScreen('map');

@@ -1,10 +1,16 @@
 import { CardModel } from './card.model';
 
+export type StatusTriggerMoment = 'onApply' | 'turnStart' | 'turnEnd';
+
 export interface StatusEffect {
   id: string;
   name: string;
-  /** Number of turns remaining; null = permanent */
+  icon: string;
+  stacks: number;
+  /** Number of turns remaining; null = permanent (until stacks deplete) */
   turnsRemaining: number | null;
+  triggerMoment: StatusTriggerMoment;
+  effectId: string;
 }
 
 export interface EnemyTurnAction {

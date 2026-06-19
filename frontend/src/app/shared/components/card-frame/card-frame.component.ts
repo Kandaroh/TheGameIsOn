@@ -53,7 +53,7 @@ export interface CardFrameData {
   stats?: { label: string; value: string | number }[];
   /** Normal effect text shown on the card face. */
   effect?: string;
-  /** Enhanced effect text shown when the companion's type matches the card's type. */
+  /** Enhanced effect text shown when the companion's element matches the card's element. */
   enhancedEffect?: string;
 
   // ── Companion-specific ────────────────────────────────
@@ -129,7 +129,7 @@ export interface CardFrameData {
           <div class="card-effect enhanced-effect" *ngIf="card.enhancedEffect">
             <span class="effect-icon">✨</span>
             <span class="effect-text">{{ card.enhancedEffect }}</span>
-            <span class="enhanced-badge">Type Match</span>
+            <span class="enhanced-badge">Element Match</span>
           </div>
         </div>
 

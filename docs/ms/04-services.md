@@ -93,7 +93,7 @@ Validation order:
 On success:
 - Deducts companion energy.
 - Moves card from `hand` to `discard`.
-- Resolves the correct `effectId` / `enhancedEffectId` (enhanced when `card.type === companion.type`) via `CardEffectRepository`.
+- Resolves the correct `effectId` / `enhancedEffectId` (enhanced when `card.element === companion.element` and neither is `'neutral'`) via `CardEffectRepository`.
 - Applies the resolved `CardEffect` to `BattleState` + companions (see effect dispatch table below).
 - Appends to `battle.log` and `history`.
 

@@ -10,6 +10,7 @@ import { LevelingService } from './leveling.service';
 import { EnemyAttack } from '../models/enemy';
 import { MapArea } from '../models/node-event';
 import { CompanionAbilityService } from './companion-ability.service';
+import { StatusEffectService } from './status-effect.service';
 import { CardEffect } from '../models/card-effect';
 
 
@@ -27,6 +28,7 @@ export class BattleService {
   private enemySpawner    = new EnemySpawnerService();
   private leveling        = new LevelingService();
   private abilityService  = new CompanionAbilityService();
+  private statusService   = new StatusEffectService();
 
   // ---------------------------------------------------------------------------
   // Public API
@@ -146,7 +148,10 @@ export class BattleService {
     const updatedDiscard = [...(state.player.discard ?? []), cardId];
 
     // Resolve the effect.
-    const enhanced  = card.type === companion.type;
+    // Enhanced when the card's element matches the playing companion's element.
+    const cardElement      = card.element ?? 'neutral';
+    const companionElement = companion.element ?? 'neutral';
+    const enhanced  = cardElement !== 'neutral' && cardElement === companionElement;
     const effectId  = enhanced ? (card.enhancedEffectId ?? card.effectId) : card.effectId;
     const effect    = effectId ? await this.effectRepo.getById(effectId) : undefined;
 
@@ -198,6 +203,23 @@ export class BattleService {
       // Log passive modifier messages.
       for (const l of [...costLogs, ...modLogs, ...bonusLogs]) {
         updatedBattle.log.push(l);
+      }
+
+      // Handle apply_status: delegate to StatusEffectService.
+      if (modifiedEffect.action === 'apply_status' && modifiedEffect.statusId) {
+        let statusState: GameState = {
+          ...bonusState,
+          battle: updatedBattle,
+          companions: updatedCompanions,
+        };
+        statusState = await this.statusService.applyStatus(
+          resolvedTargets,
+          modifiedEffect.statusId,
+          modifiedEffect.value,
+          statusState
+        );
+        updatedBattle     = statusState.battle!;
+        updatedCompanions = statusState.companions;
       }
     }
 
@@ -260,6 +282,10 @@ export class BattleService {
       battle: { ...battle, log: [...battle.log], lastTurnActions: [] },
     };
 
+    // 1b. Tick statuses: turnStart (e.g. regeneration, energy drain).
+    const turnStartResult = await this.statusService.tickStatuses('turnStart', workingState);
+    workingState = turnStartResult.state;
+
     // 2. Each living enemy takes its turn.
     const turnActions: EnemyTurnAction[] = [];
 
@@ -282,7 +308,17 @@ export class BattleService {
       // Capture HP before applying the effect so we can compute damage dealt.
       const targetHpBefore = target.life;
 
-      workingState = this.effectService.apply(effect, enemy, [target], workingState);
+      // If the attack applies a status, use StatusEffectService instead.
+      if (effect.action === 'apply_status' && effect.statusId) {
+        workingState = await this.statusService.applyStatus(
+          [target],
+          effect.statusId,
+          effect.value,
+          workingState
+        );
+      } else {
+        workingState = this.effectService.apply(effect, enemy, [target], workingState);
+      }
 
       // Find the updated target to compute the damage delta.
       const updatedTarget = workingState.companions.find(c => c.id === target.id);
@@ -341,6 +377,12 @@ export class BattleService {
         },
       };
     }
+
+    // 2b. Tick statuses: turnEnd (e.g. poison damage, burn damage).
+    const turnEndResult = await this.statusService.tickStatuses('turnEnd', workingState);
+    workingState = turnEndResult.state;
+    // Merge status tick actions into the turn actions for the popup.
+    turnActions.push(...turnStartResult.actions, ...turnEndResult.actions);
 
     // 3. Advance turn counter and attach action log.
     const updatedBattle: BattleState = {

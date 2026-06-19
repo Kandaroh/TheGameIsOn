@@ -11,37 +11,37 @@ export class GameLogicService {
 
     async createInitialState(): Promise<GameState> {
     const cards: Card[] = [
-      {
-        id: 'strike', name: 'Strike', cost: 1, type: 'attack',
+            {
+        id: 'strike', name: 'Strike', cost: 1, type: 'attack', element: 'neutral',
         properties: { damage: 3 },
         effectId: 'fx-strike-normal', enhancedEffectId: 'fx-strike-enhanced',
         effect: { description: 'Deal 3 damage to one enemy.' },
         enhancedEffect: { description: 'Deal 5 damage to one enemy.' },
       },
       {
-        id: 'shield', name: 'Shield', cost: 1, type: 'defense',
+        id: 'shield', name: 'Shield', cost: 1, type: 'defense', element: 'neutral',
         properties: { block: 3 },
         effectId: 'fx-shield-normal', enhancedEffectId: 'fx-shield-enhanced',
         effect: { description: 'Gain 2 shield.' },
         enhancedEffect: { description: 'Gain 4 shield.' },
       },
       {
-        id: 'focus', name: 'Focus', cost: 2, type: 'utility',
+        id: 'focus', name: 'Focus', cost: 2, type: 'utility', element: 'neutral',
         properties: { manaGain: 2 },
       },
       {
-        id: 'bash', name: 'Bash', cost: 2, type: 'attack',
+        id: 'bash', name: 'Bash', cost: 2, type: 'attack', element: 'neutral',
         properties: { damage: 5 },
         effectId: 'fx-strike-enhanced', enhancedEffectId: 'fx-comp-strike-enhanced',
         effect: { description: 'Deal 5 damage to one enemy.' },
         enhancedEffect: { description: 'Deal 6 damage to one enemy.' },
       },
       {
-        id: 'heal', name: 'Heal', cost: 1, type: 'defense',
+        id: 'heal', name: 'Heal', cost: 1, type: 'defense', element: 'neutral',
         properties: { recover: 2 },
       },
       {
-        id: 'charge', name: 'Charge', cost: 1, type: 'utility',
+        id: 'charge', name: 'Charge', cost: 1, type: 'utility', element: 'neutral',
         properties: { speed: 1 },
       },
     ];

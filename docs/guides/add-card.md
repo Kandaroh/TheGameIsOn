@@ -8,7 +8,7 @@ A **card** is what the player draws and plays during battle. Cards live in two p
 
 | Card type | Location |
 |---|---|
-| Starter / base cards | Hardcoded in `backend/src/services/game-logic.service.ts` (`createInitialState()`) and `GameStateService.finalizeCompanions()` on the frontend |
+| Starter / base cards | `backend/data/static/base-cards.json` (loaded by `BaseCardRepository`). Also used in `game-logic.service.ts` (`createInitialState()`) for the legacy path. |
 | Companion reward cards | `backend/data/static/companions.json` → inside each companion's `priceDecks` (`common`, `uncommon`, `rare` arrays) |
 
 ---
@@ -77,7 +77,7 @@ npm run start
 | `target` | `string` | `"wildMonster"`, `"companion"`, `"deck"`, `"discard"` — who the card targets |
 | `targetNumber` | `1` \| `2` \| `"ALL"` | How many targets the player must select |
 | `effectId` | `string` | Links to a `CardEffect` in `card-effects.json` for the normal version |
-| `enhancedEffectId` | `string` | Links to a `CardEffect` for the enhanced version (when companion type matches card type) |
+| `enhancedEffectId` | `string` | Links to a `CardEffect` for the enhanced version (when companion element matches card element) |
 | `effect` | `{ "description": "..." }` | Text shown on the card for the normal effect |
 | `enhancedEffect` | `{ "description": "..." }` | Text shown for the enhanced effect |
 | `properties` | `object` | Legacy catch-all for extra data |
@@ -88,19 +88,19 @@ npm run start
 
 When a companion plays a card, the game checks:
 
-> Does `card.type` equal `companion.type`?
+> Does `card.element` equal `companion.element`? (and is neither `"neutral"`?)
 
 - **Yes** → use `enhancedEffectId` (falls back to `effectId` if not set).
 - **No** → use `effectId`.
 
-Example: A `"type": "attack"` card played by an `"type": "attack"` companion gets the enhanced version.
+Example: A `"element": "fire"` card played by a `"element": "fire"` companion gets the enhanced version. Neutral-element cards never trigger enhancement.
 
 ---
 
 ## Tips
 
 - **Cards without an `effectId`** can still be played but produce no game effect. Useful for placeholder cards during design.
-- **`element` on a card** is purely visual — it tints the card frame border and background.
+- **`element` on a card** determines enhancement eligibility **and** tints the card frame border and background. A card with `"element": "fire"` played by a fire-element companion will use the enhanced effect.
 - **Reward tier matters:** `common` cards appear more often since the reward system draws 3 random cards from the tier pool.
 
 ---
