@@ -12,7 +12,10 @@ import { CardFrameData } from '../../shared/components/card-frame/card-frame.com
         <div class="options">
           <div class="companion-card-wrap" *ngFor="let companion of currentOptions">
             <app-card-frame variant="selection" [card]="companionCardData(companion)">
-              <div class="selection-extra">
+                            <div class="selection-extra">
+                <div class="unlock-schedule" *ngIf="companion.abilityUnlockLevels?.length">
+                  Abilities at Lv. {{ companion.abilityUnlockLevels.join(', ') }}
+                </div>
                 <div class="deck-info">
                   <span><strong>Common</strong> {{ companion.priceDecks.common.length }}</span>
                   <span><strong>Uncommon</strong> {{ companion.priceDecks.uncommon.length }}</span>
@@ -45,6 +48,7 @@ import { CardFrameData } from '../../shared/components/card-frame/card-frame.com
      .cancel-button { padding: 10px 20px; border: none; border-radius: 10px; background: #777; color: white; cursor: pointer; }
      .cancel-button:hover { background: #555; }
      .loading { text-align: center; color: #556; }
+     .unlock-schedule { font-size: 0.75rem; font-weight: 700; color: #64748b; text-align: center; padding: 2px 0; }
     `
   ]
 })
@@ -61,9 +65,17 @@ export class CompanionSelectionComponent {
     return companion.sprite ? `url('${companion.sprite}')` : 'none';
   }
 
-    companionCardData(companion: CompanionModel): CardFrameData {
+                companionCardData(companion: CompanionModel): CardFrameData {
     const maxHp     = companion.maxLife   ?? companion.life;
     const maxEnergy = companion.maxEnergy ?? companion.energyRefill ?? companion.energy;
+
+    // Compute next unlock level
+    const unlockLevels = companion.abilityUnlockLevels ?? [];
+    const filledSlots  = companion.specialAbilities?.length ?? 0;
+    const nextUnlock   = filledSlots < unlockLevels.length
+      ? unlockLevels[filledSlots]
+      : null;
+
     return {
       name:      companion.name,
       band:      companion.type,
@@ -73,7 +85,18 @@ export class CompanionSelectionComponent {
       hp:        companion.life,
       maxHp,
       energy:    companion.energy,
-      maxEnergy
+      maxEnergy,
+      level:     companion.level,
+      exp:       companion.exp,
+      nextLevelExp: companion.nextLevelExp,
+      energyRefill: companion.energyRefill,
+      abilities: (companion.specialAbilities ?? []).map(a => ({
+        name: a.name,
+        description: a.description,
+        trigger: a.trigger,
+        unlocked: true,
+      })),
+      nextUnlockLevel: nextUnlock,
     };
   }
 }

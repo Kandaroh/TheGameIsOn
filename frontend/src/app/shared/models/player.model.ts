@@ -8,4 +8,7 @@ export interface PlayerModel {
   hand: string[];
   discard: string[];
   position: string;
+  gold: number;
+  /** Total battle encounters started in this session. Drives enemy level scaling. */
+  encounterCount: number;
 }

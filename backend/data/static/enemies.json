@@ -1,0 +1,322 @@
+[
+  {
+    "id": "wild-wolf",
+    "name": "Wild Wolf",
+    "type": "Beast",
+    "element": "earth",
+    "baseLife": 18,
+    "baseEnergy": 2,
+    "spawnChance": 0.7,
+    "spawnArea": "forest",
+    "level": 1,
+    "expReward": 30,
+    "specialAbilities": [],
+    "attacks": [
+      {
+        "id": "wild-wolf-bite",
+        "name": "Bite",
+        "type": "attack",
+        "element": "earth",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-bite",
+        "selectionChance": 0.7
+      },
+      {
+        "id": "wild-wolf-howl",
+        "name": "Howl",
+        "type": "utility",
+        "element": "earth",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-howl",
+        "selectionChance": 0.3
+      }
+    ],
+    "rewards": [
+      { "type": "gold", "value": 10 },
+      { "type": "exp",  "value": 30 },
+      { "type": "card-draw", "value": 1, "tier": "common" }
+    ]
+  },
+  {
+    "id": "forest-spider",
+    "name": "Forest Spider",
+    "type": "Beast",
+    "element": "earth",
+    "baseLife": 14,
+    "baseEnergy": 2,
+    "spawnChance": 0.6,
+    "spawnArea": "forest",
+    "level": 1,
+    "expReward": 25,
+    "specialAbilities": [],
+    "attacks": [
+      {
+        "id": "forest-spider-bite",
+        "name": "Venomous Bite",
+        "type": "attack",
+        "element": "earth",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-bite",
+        "selectionChance": 0.8
+      },
+      {
+        "id": "forest-spider-web",
+        "name": "Web Shot",
+        "type": "utility",
+        "element": "earth",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-howl",
+        "selectionChance": 0.2
+      }
+    ],
+    "rewards": [
+      { "type": "gold", "value": 8 },
+      { "type": "exp",  "value": 25 },
+      { "type": "card-draw", "value": 1, "tier": "common" }
+    ]
+  },
+  {
+    "id": "stone-golem",
+    "name": "Stone Golem",
+    "type": "Construct",
+    "element": "earth",
+    "baseLife": 28,
+    "baseEnergy": 1,
+    "spawnChance": 0.5,
+    "spawnArea": "dungeon",
+    "level": 2,
+    "expReward": 50,
+    "specialAbilities": [],
+    "attacks": [
+      {
+        "id": "stone-golem-slam",
+        "name": "Rock Slam",
+        "type": "attack",
+        "element": "earth",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-slam",
+        "selectionChance": 0.8
+      },
+      {
+        "id": "stone-golem-harden",
+        "name": "Harden",
+        "type": "defense",
+        "element": "earth",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-harden",
+        "selectionChance": 0.2
+      }
+    ],
+    "rewards": [
+      { "type": "gold", "value": 18 },
+      { "type": "exp",  "value": 50 },
+      { "type": "card-draw", "value": 1, "tier": "uncommon" }
+    ]
+  },
+  {
+    "id": "dungeon-rat",
+    "name": "Dungeon Rat",
+    "type": "Beast",
+    "element": "earth",
+    "baseLife": 16,
+    "baseEnergy": 3,
+    "spawnChance": 0.65,
+    "spawnArea": "dungeon",
+    "level": 2,
+    "expReward": 35,
+    "specialAbilities": [],
+    "attacks": [
+      {
+        "id": "dungeon-rat-gnaw",
+        "name": "Gnaw",
+        "type": "attack",
+        "element": "earth",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-bite",
+        "selectionChance": 0.75
+      },
+      {
+        "id": "dungeon-rat-screech",
+        "name": "Screech",
+        "type": "utility",
+        "element": "earth",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-howl",
+        "selectionChance": 0.25
+      }
+    ],
+    "rewards": [
+      { "type": "gold", "value": 12 },
+      { "type": "exp",  "value": 35 },
+      { "type": "card-draw", "value": 1, "tier": "common" }
+    ]
+  },
+  {
+    "id": "ruin-wraith",
+    "name": "Ruin Wraith",
+    "type": "Undead",
+    "element": "shadow",
+    "baseLife": 22,
+    "baseEnergy": 2,
+    "spawnChance": 0.55,
+    "spawnArea": "ruins",
+    "level": 3,
+    "expReward": 65,
+    "specialAbilities": [],
+    "attacks": [
+      {
+        "id": "ruin-wraith-drain",
+        "name": "Soul Drain",
+        "type": "attack",
+        "element": "shadow",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-slam",
+        "selectionChance": 0.6
+      },
+      {
+        "id": "ruin-wraith-wail",
+        "name": "Wail",
+        "type": "utility",
+        "element": "shadow",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-howl",
+        "selectionChance": 0.4
+      }
+    ],
+    "rewards": [
+      { "type": "gold", "value": 22 },
+      { "type": "exp",  "value": 65 },
+      { "type": "card-draw", "value": 1, "tier": "uncommon" }
+    ]
+  },
+  {
+    "id": "ancient-guardian",
+    "name": "Ancient Guardian",
+    "type": "Construct",
+    "element": "arcane",
+    "baseLife": 32,
+    "baseEnergy": 2,
+    "spawnChance": 0.4,
+    "spawnArea": "ruins",
+    "level": 3,
+    "expReward": 80,
+    "specialAbilities": [],
+    "attacks": [
+      {
+        "id": "ancient-guardian-smash",
+        "name": "Arcane Smash",
+        "type": "attack",
+        "element": "arcane",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-slam",
+        "selectionChance": 0.7
+      },
+      {
+        "id": "ancient-guardian-ward",
+        "name": "Arcane Ward",
+        "type": "defense",
+        "element": "arcane",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-harden",
+        "selectionChance": 0.3
+      }
+    ],
+    "rewards": [
+      { "type": "gold", "value": 28 },
+      { "type": "exp",  "value": 80 },
+      { "type": "card-draw", "value": 1, "tier": "uncommon" }
+    ]
+  },
+  {
+    "id": "lava-elemental",
+    "name": "Lava Elemental",
+    "type": "Elemental",
+    "element": "fire",
+    "baseLife": 30,
+    "baseEnergy": 3,
+    "spawnChance": 0.6,
+    "spawnArea": "volcano",
+    "level": 4,
+    "expReward": 100,
+    "specialAbilities": [],
+    "attacks": [
+      {
+        "id": "lava-elemental-eruption",
+        "name": "Eruption",
+        "type": "attack",
+        "element": "fire",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-slam",
+        "selectionChance": 0.55
+      },
+      {
+        "id": "lava-elemental-magma-wave",
+        "name": "Magma Wave",
+        "type": "attack",
+        "element": "fire",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-howl",
+        "selectionChance": 0.45
+      }
+    ],
+    "rewards": [
+      { "type": "gold", "value": 35 },
+      { "type": "exp",  "value": 100 },
+      { "type": "card-draw", "value": 1, "tier": "rare" }
+    ]
+  },
+  {
+    "id": "volcanic-drake",
+    "name": "Volcanic Drake",
+    "type": "Dragon",
+    "element": "fire",
+    "baseLife": 38,
+    "baseEnergy": 2,
+    "spawnChance": 0.45,
+    "spawnArea": "volcano",
+    "level": 4,
+    "expReward": 120,
+    "specialAbilities": [],
+    "attacks": [
+      {
+        "id": "volcanic-drake-flame-breath",
+        "name": "Flame Breath",
+        "type": "attack",
+        "element": "fire",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-slam",
+        "selectionChance": 0.65
+      },
+      {
+        "id": "volcanic-drake-armour",
+        "name": "Scale Armour",
+        "type": "defense",
+        "element": "fire",
+        "targeting": "companion",
+        "targetNumber": 1,
+        "effectId": "fx-enemy-harden",
+        "selectionChance": 0.35
+      }
+    ],
+    "rewards": [
+      { "type": "gold", "value": 42 },
+      { "type": "exp",  "value": 120 },
+      { "type": "card-draw", "value": 1, "tier": "rare" }
+    ]
+  }
+]

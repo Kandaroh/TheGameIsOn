@@ -1,0 +1,182 @@
+[
+    {
+    "id": "wyvern",
+    "name": "Wyvern",
+    "type": "attack",
+    "element": "fire",
+    "life": 26,
+    "energy": 3,
+    "energyRefill": 1,
+    "abilityUnlockLevels": [1, 13, 36],
+    "abilityPool": [
+            { "id": "wyvern-fire-aura",     "name": "Fire Aura",     "description": "Attack cards deal +1 damage.",                       "trigger": "passive", "usesPerCombat": null, "effectId": "fx-fire-aura",     "modifier": { "type": "bonus_damage",  "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "attack" } } },
+      { "id": "wyvern-ember-shield",  "name": "Ember Shield",  "description": "Gain 1 shield when playing an attack card.",         "trigger": "passive", "usesPerCombat": null, "effectId": "fx-ember-shield",  "modifier": { "type": "bonus_shield",  "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "attack" } } },
+      { "id": "wyvern-heat-surge",    "name": "Heat Surge",    "description": "Attack cards cost 1 less energy.",                    "trigger": "passive", "usesPerCombat": null, "effectId": "fx-heat-surge",    "modifier": { "type": "cost_reduction", "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "attack" } } },
+      { "id": "wyvern-inferno-heart", "name": "Inferno Heart", "description": "Fire cards deal +2 damage.",                          "trigger": "passive", "usesPerCombat": null, "effectId": "fx-inferno-heart", "modifier": { "type": "conditional_bonus", "value": 2, "condition": { "field": "card.element", "op": "eq", "value": "fire" } } },
+      { "id": "wyvern-scorch-aura",   "name": "Scorch Aura",   "description": "Enemies that attack this companion take 1 damage.",  "trigger": "passive", "usesPerCombat": null, "effectId": "fx-scorch-aura",   "modifier": { "type": "retaliation", "value": 1 } }
+    ],
+    "specialAbilities": [],
+    "priceDecks": {
+      "common": [
+        { "id": "wyvern-claw", "name": "Wyvern Claw", "cost": 1, "type": "attack", "properties": { "damage": 3 }, "element": "fire" },
+        { "id": "wyvern-fly", "name": "Winged Leap", "cost": 1, "type": "utility", "properties": { "evade": 1 }, "element": "fire" }
+      ],
+      "uncommon": [
+        { "id": "wyvern-breath", "name": "Flame Breath", "cost": 2, "type": "attack", "properties": { "damage": 6 }, "element": "fire" }
+      ],
+      "rare": [
+        { "id": "wyvern-ember", "name": "Ember Storm", "cost": 3, "type": "attack", "properties": { "damage": 10 }, "element": "fire" }
+      ]
+    }
+  },
+    {
+    "id": "golem",
+    "name": "Golem",
+    "type": "defense",
+    "element": "earth",
+    "life": 28,
+    "energy": 2,
+    "energyRefill": 1,
+    "abilityUnlockLevels": [1, 13, 36],
+    "abilityPool": [
+            { "id": "golem-stone-wall",    "name": "Stone Wall",    "description": "Defense cards grant +1 shield.",                      "trigger": "passive", "usesPerCombat": null, "effectId": "fx-stone-wall",  "modifier": { "type": "bonus_shield",  "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "defense" } } },
+      { "id": "golem-iron-skin",     "name": "Iron Skin",     "description": "Defense cards grant +2 shield.",                      "trigger": "passive", "usesPerCombat": null, "effectId": "fx-iron-skin",   "modifier": { "type": "bonus_shield",  "value": 2, "condition": { "field": "card.type", "op": "eq", "value": "defense" } } },
+      { "id": "golem-retaliate",     "name": "Retaliate",     "description": "Deal 1 damage to attackers when hit.",                "trigger": "passive", "usesPerCombat": null, "effectId": "fx-retaliate",   "modifier": { "type": "retaliation",   "value": 1 } },
+      { "id": "golem-fortify",       "name": "Fortify",       "description": "Defense cards deal +1 damage.",                       "trigger": "passive", "usesPerCombat": null, "effectId": "fx-fortify",     "modifier": { "type": "bonus_damage",  "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "defense" } } },
+      { "id": "golem-earthquake",    "name": "Earthquake",    "description": "Defense cards deal 1 damage to all enemies.",         "trigger": "passive", "usesPerCombat": null, "effectId": "fx-earthquake",  "modifier": { "type": "bonus_damage",  "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "defense" } } }
+    ],
+    "specialAbilities": [],
+    "priceDecks": {
+      "common": [
+        { "id": "golem-block", "name": "Rock Block", "cost": 1, "type": "defense", "properties": { "block": 4 }, "element": "earth" },
+        { "id": "golem-rumble", "name": "Ground Rumble", "cost": 1, "type": "utility", "properties": { "taunt": true }, "element": "earth" }
+      ],
+      "uncommon": [
+        { "id": "golem-guard", "name": "Iron Guard", "cost": 2, "type": "defense", "properties": { "block": 8 }, "element": "earth" }
+      ],
+      "rare": [
+        { "id": "golem-quake", "name": "Earthquake", "cost": 3, "type": "utility", "properties": { "stun": true }, "element": "earth" }
+      ]
+    }
+  },
+    {
+    "id": "sprite",
+    "name": "Sprite",
+    "type": "utility",
+    "element": "water",
+    "life": 20,
+    "energy": 4,
+    "energyRefill": 2,
+    "abilityUnlockLevels": [1, 13, 36],
+    "abilityPool": [
+            { "id": "sprite-tidal-gift",   "name": "Tidal Gift",    "description": "Utility cards deal +1 damage.",                       "trigger": "passive", "usesPerCombat": null, "effectId": "fx-tidal-gift",  "modifier": { "type": "bonus_damage",   "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "utility" } } },
+      { "id": "sprite-mist-veil",    "name": "Mist Veil",     "description": "Utility cards grant 1 shield to this companion.",     "trigger": "passive", "usesPerCombat": null, "effectId": "fx-mist-veil",   "modifier": { "type": "bonus_shield",   "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "utility" } } },
+      { "id": "sprite-flow-state",   "name": "Flow State",    "description": "Utility cards cost 1 less energy.",                   "trigger": "passive", "usesPerCombat": null, "effectId": "fx-flow-state",  "modifier": { "type": "cost_reduction", "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "utility" } } },
+      { "id": "sprite-aqua-regen",   "name": "Aqua Regen",    "description": "Water cards grant 1 shield.",                         "trigger": "passive", "usesPerCombat": null, "effectId": "fx-aqua-regen",  "modifier": { "type": "bonus_shield",   "value": 1, "condition": { "field": "card.element", "op": "eq", "value": "water" } } },
+      { "id": "sprite-torrent",      "name": "Torrent",       "description": "Water cards deal +2 damage.",                         "trigger": "passive", "usesPerCombat": null, "effectId": "fx-torrent",     "modifier": { "type": "conditional_bonus", "value": 2, "condition": { "field": "card.element", "op": "eq", "value": "water" } } }
+    ],
+    "specialAbilities": [],
+    "priceDecks": {
+      "common": [
+        { "id": "sprite-dash", "name": "Quick Dash", "cost": 1, "type": "utility", "properties": { "move": 1 }, "element": "water"  },
+        { "id": "sprite-gale", "name": "Breeze", "cost": 1, "type": "utility", "properties": { "draw": 1 }, "element": "water"  }
+      ],
+      "uncommon": [
+        { "id": "sprite-splash", "name": "Aqua Puff", "cost": 2, "type": "defense", "properties": { "shield": 5 }, "element": "water"  }
+      ],
+      "rare": [
+        { "id": "sprite-starlight", "name": "Starlight", "cost": 3, "type": "utility", "properties": { "heal": 4 }, "element": "water"  }
+      ]
+    }
+  },
+    {
+    "id": "lich",
+    "name": "Lich",
+    "type": "attack",
+    "element": "shadow",
+    "life": 22,
+    "energy": 3,
+    "energyRefill": 1,
+    "abilityUnlockLevels": [1, 13, 36],
+    "abilityPool": [
+            { "id": "lich-soul-siphon",    "name": "Soul Siphon",   "description": "Attack cards deal +1 damage.",                        "trigger": "passive", "usesPerCombat": null, "effectId": "fx-soul-siphon",   "modifier": { "type": "bonus_damage",     "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "attack" } } },
+      { "id": "lich-dark-pact",      "name": "Dark Pact",     "description": "Attack cards deal +2 damage.",                        "trigger": "passive", "usesPerCombat": null, "effectId": "fx-dark-pact",     "modifier": { "type": "bonus_damage",     "value": 2, "condition": { "field": "card.type", "op": "eq", "value": "attack" } } },
+      { "id": "lich-shadow-cloak",   "name": "Shadow Cloak",  "description": "Attack cards grant 1 shield.",                        "trigger": "passive", "usesPerCombat": null, "effectId": "fx-shadow-cloak",  "modifier": { "type": "bonus_shield",     "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "attack" } } },
+      { "id": "lich-necrotic-aura",  "name": "Necrotic Aura", "description": "Deal 1 damage to attackers when hit.",                "trigger": "passive", "usesPerCombat": null, "effectId": "fx-necrotic-aura", "modifier": { "type": "retaliation",      "value": 1 } },
+      { "id": "lich-void-bolt",      "name": "Void Bolt",     "description": "Shadow cards deal +2 damage.",                        "trigger": "passive", "usesPerCombat": null, "effectId": "fx-void-bolt",     "modifier": { "type": "conditional_bonus", "value": 2, "condition": { "field": "card.element", "op": "eq", "value": "shadow" } } }
+    ],
+    "specialAbilities": [],
+    "priceDecks": {
+      "common": [
+        { "id": "lich-bolt", "name": "Soul Bolt", "cost": 1, "type": "attack", "properties": { "damage": 3 }, "element": "shadow" },
+        { "id": "lich-wisp", "name": "Wisp", "cost": 1, "type": "utility", "properties": { "weaken": true }, "element": "shadow"  }
+      ],
+      "uncommon": [
+        { "id": "lich-chain", "name": "Chain Curse", "cost": 2, "type": "attack", "properties": { "damage": 5 }, "element": "shadow"  }
+      ],
+      "rare": [
+        { "id": "lich-veil", "name": "Death Veil", "cost": 3, "type": "defense", "properties": { "block": 7 }, "element": "shadow"  }
+      ]
+    }
+  },
+    {
+    "id": "turtle",
+    "name": "Turtle",
+    "type": "defense",
+    "element": "arcane",
+    "life": 24,
+    "energy": 2,
+    "energyRefill": 1,
+    "abilityUnlockLevels": [1, 13, 36],
+    "abilityPool": [
+            { "id": "turtle-arcane-ward",  "name": "Arcane Ward",   "description": "Defense cards grant +2 shield.",                      "trigger": "passive", "usesPerCombat": null, "effectId": "fx-arcane-ward",   "modifier": { "type": "bonus_shield",     "value": 2, "condition": { "field": "card.type", "op": "eq", "value": "defense" } } },
+      { "id": "turtle-shell-bash",   "name": "Shell Bash",    "description": "Defense cards deal +2 damage.",                       "trigger": "passive", "usesPerCombat": null, "effectId": "fx-shell-bash",    "modifier": { "type": "bonus_damage",     "value": 2, "condition": { "field": "card.type", "op": "eq", "value": "defense" } } },
+      { "id": "turtle-mystic-shell", "name": "Mystic Shell",  "description": "Defense cards grant +1 shield.",                      "trigger": "passive", "usesPerCombat": null, "effectId": "fx-mystic-shell",  "modifier": { "type": "bonus_shield",     "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "defense" } } },
+      { "id": "turtle-slow-aura",    "name": "Slow Aura",     "description": "Deal 1 damage to attackers when hit.",                "trigger": "passive", "usesPerCombat": null, "effectId": "fx-slow-aura",     "modifier": { "type": "retaliation",      "value": 1 } },
+      { "id": "turtle-arcane-echo",  "name": "Arcane Echo",   "description": "Arcane cards deal +2 damage.",                        "trigger": "passive", "usesPerCombat": null, "effectId": "fx-arcane-echo",   "modifier": { "type": "conditional_bonus", "value": 2, "condition": { "field": "card.element", "op": "eq", "value": "arcane" } } }
+    ],
+    "specialAbilities": [],
+    "priceDecks": {
+      "common": [
+        { "id": "turtle-shell", "name": "Shell Bash", "cost": 1, "type": "defense", "properties": { "block": 4 }, "element": "arcane" },
+        { "id": "turtle-lash", "name": "Tail Lash", "cost": 1, "type": "attack", "properties": { "damage": 2 }, "element": "arcane" }
+      ],
+      "uncommon": [
+        { "id": "turtle-wave", "name": "Tidal Wave", "cost": 2, "type": "utility", "properties": { "slow": true }, "element": "arcane" }
+      ],
+      "rare": [
+        { "id": "turtle-fortress", "name": "Fortress", "cost": 3, "type": "defense", "properties": { "block": 10 }, "element": "arcane" }
+      ]
+    }
+  },
+    {
+    "id": "griffin",
+    "name": "Griffin",
+    "type": "utility",
+    "element": "air",
+    "life": 23,
+    "energy": 3,
+    "energyRefill": 2,
+    "abilityUnlockLevels": [1, 13, 36],
+    "abilityPool": [
+            { "id": "griffin-tailwind",    "name": "Tailwind",      "description": "Utility cards cost 1 less energy.",                   "trigger": "passive", "usesPerCombat": null, "effectId": "fx-tailwind",      "modifier": { "type": "cost_reduction",   "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "utility" } } },
+      { "id": "griffin-sky-dodge",   "name": "Sky Dodge",     "description": "Utility cards grant 1 shield.",                       "trigger": "passive", "usesPerCombat": null, "effectId": "fx-sky-dodge",     "modifier": { "type": "bonus_shield",     "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "utility" } } },
+      { "id": "griffin-keen-eye",    "name": "Keen Eye",      "description": "Utility cards deal +1 damage.",                       "trigger": "passive", "usesPerCombat": null, "effectId": "fx-keen-eye",      "modifier": { "type": "bonus_damage",     "value": 1, "condition": { "field": "card.type", "op": "eq", "value": "utility" } } },
+      { "id": "griffin-gust-shield", "name": "Gust Shield",   "description": "Air cards grant 2 shield.",                           "trigger": "passive", "usesPerCombat": null, "effectId": "fx-gust-shield",   "modifier": { "type": "bonus_shield",     "value": 2, "condition": { "field": "card.element", "op": "eq", "value": "air" } } },
+      { "id": "griffin-updraft",     "name": "Updraft",       "description": "Deal 1 damage to attackers when hit.",                "trigger": "passive", "usesPerCombat": null, "effectId": "fx-updraft",       "modifier": { "type": "retaliation",      "value": 1 } }
+    ],
+    "specialAbilities": [],
+    "priceDecks": {
+      "common": [
+        { "id": "griffin-glide", "name": "Sky Glide", "cost": 1, "type": "utility", "properties": { "evade": 1 }, "element": "air" },
+        { "id": "griffin-screech", "name": "Screech", "cost": 1, "type": "utility", "properties": { "debuff": true }, "element": "air" }
+      ],
+      "uncommon": [
+        { "id": "griffin-strike", "name": "Aerial Strike", "cost": 2, "type": "attack", "properties": { "damage": 5 }, "element": "air" }
+      ],
+      "rare": [
+        { "id": "griffin-gale", "name": "Gale Force", "cost": 3, "type": "utility", "properties": { "draw": 2 }, "element": "air" }
+      ]
+    }
+  }
+]

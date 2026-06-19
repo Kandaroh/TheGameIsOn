@@ -3,6 +3,34 @@ import { CardElement } from '../../models/card.model';
 
 export type CardFrameVariant = 'hand' | 'companion' | 'enemy' | 'selection';
 
+export interface CardAbilityData {
+  name: string;
+  description: string;
+  trigger: 'passive' | 'activable';
+  /** Pre-computed by caller: true for chosen abilities (specialAbilities), false for locked pool entries. */
+  unlocked: boolean;
+}
+
+export interface CardStatusData {
+  id: string;
+  name: string;
+  icon: string;
+  stacks?: number;
+  turnsRemaining?: number | null;
+}
+
+export interface CardRewardData {
+  type: 'gold' | 'exp' | 'card-draw';
+  value: number;
+  tier?: string;
+}
+
+export interface CardAttackData {
+  name: string;
+  description: string;
+  element?: string;
+}
+
 export interface CardFrameData {
   name: string;
   /** Sub-type label shown in the band (e.g. 'Companion', 'Beast', 'attack') */
@@ -27,12 +55,36 @@ export interface CardFrameData {
   effect?: string;
   /** Enhanced effect text shown when the companion's type matches the card's type. */
   enhancedEffect?: string;
+
+  // ── Companion-specific ────────────────────────────────
+  level?: number;
+  exp?: number;
+  nextLevelExp?: number;
+  energyRefill?: number;
+  abilities?: CardAbilityData[];
+  nextUnlockLevel?: number | null;   // null = all 3 slots filled
+  statusEffects?: CardStatusData[];
+
+  // ── Enemy-specific ────────────────────────────────────
+  expReward?: number;
+  rewards?: CardRewardData[];
+  attacks?: CardAttackData[];
 }
 
 @Component({
   selector: 'app-card-frame',
   template: `
-    <div class="card-frame" [ngClass]="[variantClass, bandClass]">
+    <div class="card-frame-wrapper">
+    <div class="card-frame" [ngClass]="[variantClass, bandClass, elementFrameClass]">
+
+      <!-- STATUS STRIP (top-right, outside flow) -->
+      <div class="status-strip" *ngIf="card.statusEffects?.length">
+        <div class="status-badge" *ngFor="let s of card.statusEffects"
+             [title]="s.name + (s.stacks ? ' x' + s.stacks : '') + (s.turnsRemaining != null ? ' (' + s.turnsRemaining + 't)' : '')">
+          {{ s.icon }}
+          <span class="status-stack" *ngIf="s.stacks && s.stacks > 1">{{ s.stacks }}</span>
+        </div>
+      </div>
 
       <!-- TOP BAR: name (left) + element badge (centre) + cost gem (right) -->
       <div class="card-top-bar">
@@ -60,7 +112,10 @@ export interface CardFrameData {
       <div class="card-content">
         <!-- Playable cards: show type pill -->
         <div class="card-type-pill" *ngIf="card.type && !hasBarStats">
-          <span class="type-pill" [ngClass]="'type-' + card.type">{{ card.type | titlecase }}</span>
+          <span class="type-pill" [ngClass]="'type-' + card.type">
+            <span *ngIf="card.element" class="pill-elem-icon">{{ elementIcon(card.element) }}</span>
+            {{ card.type | titlecase }}
+          </span>
         </div>
 
         <p class="card-description" *ngIf="card.description">{{ card.description }}</p>
@@ -112,6 +167,71 @@ export interface CardFrameData {
           </div>
         </ng-container>
 
+        <!-- ── COMPANION-SPECIFIC SECTION ─────────────────── -->
+        <ng-container *ngIf="variant === 'companion' || variant === 'selection'">
+          <!-- XP bar -->
+          <div class="stat-bar-row" *ngIf="card.exp !== undefined">
+            <span class="stat-bar-label">✨</span>
+            <div class="stat-bar xp-bar">
+              <div class="stat-bar-fill xp-fill"
+                   [style.width.%]="xpPercent"></div>
+            </div>
+            <span class="stat-bar-value">{{ card.exp }}<span *ngIf="card.nextLevelExp !== undefined" class="stat-bar-max">/{{ card.nextLevelExp }}</span></span>
+          </div>
+
+          <!-- Energy refill -->
+          <div class="info-row" *ngIf="card.energyRefill !== undefined">
+            <span class="info-icon">🔄</span>
+            <span class="info-text">Energy refill: <strong>+{{ card.energyRefill }}</strong> per turn</span>
+          </div>
+
+          <!-- Abilities -->
+          <div class="abilities-list" *ngIf="unlockedAbilities.length">
+            <div class="ability-item" *ngFor="let ability of unlockedAbilities">
+              <div class="ability-header">
+                <span class="ability-trigger-icon">{{ ability.trigger === 'passive' ? '🔵' : '🟡' }}</span>
+                <span class="ability-name">{{ ability.name }}</span>
+              </div>
+              <p class="ability-desc">{{ ability.description }}</p>
+            </div>
+          </div>
+
+          <!-- Next unlock label -->
+          <div class="next-unlock" *ngIf="card.nextUnlockLevel">
+            Next ability at Lv. {{ card.nextUnlockLevel }}
+          </div>
+        </ng-container>
+
+        <!-- ── ENEMY-SPECIFIC SECTION ──────────────────────── -->
+        <ng-container *ngIf="variant === 'enemy'">
+          <!-- XP reward -->
+          <div class="info-row" *ngIf="card.expReward !== undefined">
+            <span class="info-icon">✨</span>
+            <span class="info-text"><strong>{{ card.expReward }}</strong> XP</span>
+          </div>
+
+          <!-- Rewards -->
+          <div class="rewards-row" *ngIf="card.rewards?.length">
+            <span class="reward-badge" *ngFor="let r of card.rewards">
+              <ng-container [ngSwitch]="r.type">
+                <ng-container *ngSwitchCase="'gold'">💰 {{ r.value }}</ng-container>
+                <ng-container *ngSwitchCase="'card-draw'">🃏 draw{{ r.tier ? ' (' + r.tier + ')' : '' }}</ng-container>
+                <ng-container *ngSwitchDefault>{{ r.type }} {{ r.value }}</ng-container>
+              </ng-container>
+            </span>
+          </div>
+
+          <!-- Attacks -->
+          <div class="attacks-list" *ngIf="card.attacks?.length">
+            <div class="attack-item" *ngFor="let atk of card.attacks">
+              <div class="attack-header">
+                <span class="attack-name">{{ atk.name }}</span>
+              </div>
+              <p class="attack-desc">{{ atk.description }}</p>
+            </div>
+          </div>
+        </ng-container>
+
         <!-- Legacy stats grid (fallback for callers that still pass stats) -->
         <div class="stats-grid" *ngIf="!hasBarStats && card.stats?.length">
           <div *ngFor="let stat of card.stats">
@@ -123,8 +243,14 @@ export interface CardFrameData {
       </div>
 
     </div>
+    </div>
   `,
   styles: [`
+    /* ── Wrapper (for absolute-positioned status strip) ── */
+    .card-frame-wrapper {
+      position: relative;
+    }
+
     /* ── Layout ──────────────────────────────────────────── */
     .card-frame {
       border-radius: 22px;
@@ -147,7 +273,7 @@ export interface CardFrameData {
     }
 
     .card-name {
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       font-weight: 800;
       color: #ffffff;
       white-space: nowrap;
@@ -238,7 +364,7 @@ export interface CardFrameData {
 
     /* ── Art ─────────────────────────────────────────────── */
     .card-art {
-      min-height: 120px;
+      min-height: 160px;
       background-color: #cbd5e1;
       background-size: cover;
       background-position: center;
@@ -283,7 +409,7 @@ export interface CardFrameData {
 
     .card-description {
       margin: 0;
-      font-size: 0.88rem;
+      font-size: 0.93rem;
       color: #1e293b;
       line-height: 1.4;
     }
@@ -300,7 +426,7 @@ export interface CardFrameData {
       gap: 6px;
       border-radius: 8px;
       padding: 5px 8px;
-      font-size: 0.80rem;
+      font-size: 0.85rem;
       line-height: 1.35;
     }
     .normal-effect {
@@ -427,6 +553,20 @@ export interface CardFrameData {
     }
 
     /* ── Legacy stats grid (fallback) ────────────────────── */
+    /* ── Element frame tints ────────────────────────────── */
+    .elem-frame-fire    { border-color: #f87171; background: linear-gradient(180deg,#fff1f2 0%,#fff 60%); }
+    .elem-frame-water   { border-color: #60a5fa; background: linear-gradient(180deg,#eff6ff 0%,#fff 60%); }
+    .elem-frame-earth   { border-color: #a16207; background: linear-gradient(180deg,#fefce8 0%,#fff 60%); }
+    .elem-frame-air     { border-color: #6ee7b7; background: linear-gradient(180deg,#ecfdf5 0%,#fff 60%); }
+    .elem-frame-arcane  { border-color: #a78bfa; background: linear-gradient(180deg,#f5f3ff 0%,#fff 60%); }
+    .elem-frame-shadow  { border-color: #818cf8; background: linear-gradient(180deg,#1e1b4b 0%,#1e293b 60%); }
+    .elem-frame-light   { border-color: #fde68a; background: linear-gradient(180deg,#fffbeb 0%,#fff 60%); }
+    .elem-frame-neutral { border-color: #94a3b8; }
+    .elem-frame-shadow .card-description,
+    .elem-frame-shadow .effect-text { color: #e2e8f0; }
+
+    .pill-elem-icon { margin-right: 2px; }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -441,6 +581,162 @@ export interface CardFrameData {
       display: block;
       font-size: 0.95rem;
     }
+
+    /* ── Status strip (top-right badges) ──────────────────── */
+    .status-strip {
+      position: absolute;
+      top: 6px;
+      right: -32px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 5;
+    }
+    .status-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.82);
+      border: 1.5px solid #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      position: relative;
+      cursor: default;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .status-stack {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      font-size: 0.55rem;
+      font-weight: 800;
+      background: #ef4444;
+      color: white;
+      border-radius: 99px;
+      padding: 0 4px;
+      line-height: 1.3;
+    }
+
+    /* ── XP bar ──────────────────────────────────────────── */
+    .xp-fill {
+      background: linear-gradient(90deg, #6366f1, #818cf8);
+    }
+
+    /* ── Info row (energy refill, xp reward) ──────────────── */
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #475569;
+      padding: 3px 0;
+    }
+    .info-icon {
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .info-text {
+      flex: 1;
+    }
+    .info-text strong {
+      color: #1e293b;
+    }
+
+    /* ── Abilities list (companion) ───────────────────────── */
+    .abilities-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ability-item {
+      background: rgba(99, 102, 241, 0.06);
+      border: 1px solid rgba(99, 102, 241, 0.18);
+      border-radius: 8px;
+      padding: 5px 8px;
+    }
+    .ability-header {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .ability-trigger-icon {
+      font-size: 0.72rem;
+      flex-shrink: 0;
+    }
+    .ability-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #312e81;
+    }
+    .ability-desc {
+      margin: 2px 0 0 0;
+      font-size: 0.73rem;
+      color: #64748b;
+      line-height: 1.3;
+      padding-left: 18px;
+    }
+
+    /* ── Next unlock label ─────────────────────────────────── */
+    .next-unlock {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #94a3b8;
+      font-style: italic;
+      text-align: center;
+      padding: 2px 0;
+    }
+
+    /* ── Rewards row (enemy) ──────────────────────────────── */
+    .rewards-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .reward-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      color: #92400e;
+      border-radius: 20px;
+      padding: 2px 8px;
+      white-space: nowrap;
+    }
+
+    /* ── Attacks list (enemy) ─────────────────────────────── */
+    .attacks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .attack-item {
+      background: rgba(239, 68, 68, 0.05);
+      border: 1px solid rgba(239, 68, 68, 0.15);
+      border-radius: 8px;
+      padding: 5px 8px;
+    }
+    .attack-header {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .attack-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #991b1b;
+    }
+    .attack-desc {
+      margin: 2px 0 0 0;
+      font-size: 0.73rem;
+      color: #64748b;
+      line-height: 1.3;
+    }
   `]
 })
 export class CardFrameComponent {
@@ -453,6 +749,10 @@ export class CardFrameComponent {
 
   get bandClass(): string {
     return this.card?.bandClass ?? '';
+  }
+
+  get elementFrameClass(): string {
+    return this.card?.element ? `elem-frame-${this.card.element}` : '';
   }
 
   /** True when the card has bar-style stats (hp/energy), suppresses legacy stats-grid */
@@ -473,6 +773,18 @@ export class CardFrameComponent {
     if (pct <= 25) return 'hp-danger';
     if (pct <= 50) return 'hp-warn';
     return '';
+  }
+
+  /** XP percentage 0–100 for the bar fill */
+  get xpPercent(): number {
+    if (this.card.exp === undefined) return 0;
+    const max = this.card.nextLevelExp ?? 1;
+    return max > 0 ? Math.round((this.card.exp / max) * 100) : 0;
+  }
+
+  /** Unlocked abilities only (locked ones are hidden per spec) */
+  get unlockedAbilities(): CardAbilityData[] {
+    return (this.card.abilities ?? []).filter(a => a.unlocked);
   }
 
   /** Array of dot slots for energy display */

@@ -1,5 +1,12 @@
 # Development Guide
 
+> For full architecture, extension patterns, and file tree see [docs/index.md](index.md) and [docs/architecture.md](architecture.md).  
+> For all interfaces see [docs/data-model.md](data-model.md).  
+> For battle logic see [docs/battle-system.md](battle-system.md).  
+> For frontend screens see [docs/frontend-guide.md](frontend-guide.md).
+
+---
+
 ## Project intent
 
 This project is designed to be easy to extend with new game features, new node events, and new player actions.
@@ -39,30 +46,34 @@ The frontend and backend are deliberately separated:
 
 ## State persistence
 
-Persistent game state is stored in JSON at `backend-data/game-state.json`.
+Persistent game state is stored in JSON at `backend/data/saves/game-state.json`.  
+Static data lives in `backend/data/static/` (`card-effects.json`, `companions.json`, `enemies.json`, `events.json`).
 
-The backend will generate an initial seeded game state if the file does not exist.
+The backend will generate an initial seeded game state if the save file does not exist.
 
 ## Frontend screen flow
 
 | Screen | Component | Trigger |
 |--------|-----------|---------|
 | `menu` | `MenuComponent` | Default on load |
-| `companion-select` | `CompanionSelectionComponent` | "Start" button → `beginCompanionSelection()` |
+| `companion-select` | `CompanionSelectionComponent` | "Start" → `beginCompanionSelection()` |
 | `map` | `MapComponent` | Companion selection complete or `startNewRun()` |
 | `battle` | `BattleComponent` | `moveToNode()` lands on a `battle` event node |
-| `event` | Event placeholder components | `moveToNode()` lands on any non-battle event |
+| `event` | Event-specific component | `moveToNode()` lands on non-battle event |
+| `combat-results` | `CombatResultsComponent` | Battle ends (`battle.active === false`) |
+| `card-reward` | `CardRewardComponent` | `proceedFromResults()` with pending rewards |
 
 The current screen is managed by `GameStateService.screen$`.
 
 ### Battle screen data flow
 
-1. `moveToNode()` detects `event.type === 'battle'` and calls `dealOpeningHand(state)`.
-2. `dealOpeningHand` draws 5 cards and seeds `GameState.battle` with two default enemies (Wolf + Golem) if none exists yet, then saves to backend.
-3. `BattleComponent` reads enemies from `state.battle.enemies` via `getEnemies(state)`; falls back to hardcoded list if `battle` is absent.
-4. Card plays call `GameStateService.playCardWithCompanion()` → `ApiService.battlePlayCard()` → `POST /action/battle/play-card`.
-5. End turn calls `GameStateService.endTurn()` → `ApiService.battleEndTurn()` → `POST /action/battle/end-turn`.
-6. Both endpoints return the full updated `GameState`; the response is piped into `state$` so all bindings update in one tick.
+1. `moveToNode()` detects `event.type === 'battle'` → calls `POST /action/battle/start`.
+2. Backend draws 5 cards, spawns enemies via `EnemySpawnerService`, seeds `BattleState`.
+3. Card plays: `playCardWithCompanion()` → `POST /action/battle/play-card` → full `GameState` response.
+4. End turn: `endTurn()` → `POST /action/battle/end-turn` → response includes `battle.lastTurnActions`.
+5. Frontend shows `AttackResultPopupComponent` with enemy action summary.
+6. If all enemies dead → `collectRewards()` → `battle.active = false` → navigate to `combat-results`.
+7. Player claims rewards via `card-reward` screen, then returns to `map`.
 
 ## Running automated checks
 
@@ -79,11 +90,9 @@ npm run test:cross
 
 ## Debugging tips
 
-### Start button does nothing
-Verify the backend is reachable: `POST /api/game/action/new-run`. If the API responds with JSON, open DevTools → Network while clicking Start. The frontend method called is `GameStateService.beginCompanionSelection()` → `ApiService.newRun()` followed by `ApiService.getCompanions()`.
-
-### Card play has no effect
-Check `GameState.history` and `GameState.battle.log` in the response from `POST /action/battle/play-card`. If `battle` is absent or `active` is `false` the service will log a rejection to history with a plain-text reason. Ensure `dealOpeningHand()` was called when entering the battle (it seeds `battle` before the first play).
-
-### Enemy HP not changing
-Confirm the card has a non-null `effectId` pointing to a record with `action: "damage"` in `card-effects.json`. Inspect the response JSON: `battle.enemies[*].life` should decrease. If `targetIds` is empty, `BattleService` auto-targets the first living enemy.
+| Problem | Fix |
+|---|---|
+| Start button does nothing | Check backend reachable: `POST /api/game/action/new-run`. Check DevTools → Network for `beginCompanionSelection()` calls. |
+| Card play has no effect | Check `state.history` + `state.battle.log` for rejection message. Verify card has `effectId` pointing to `card-effects.json`. |
+| Enemy HP not changing | Confirm `effectId` points to `action: "damage"`. If `targetIds` is empty, auto-targets first living enemy. |
+| Enemy actions not showing | Check `state.battle.lastTurnActions` in API response. Verify enemies have valid `definitionId` in `enemies.json` with 3 attacks. |

@@ -3,23 +3,24 @@
     "id": "player-1",
     "life": 20,
     "mana": 3,
+    "gold": 0,
     "deck": {
       "cardIds": [
-        "comp-lich-1-1-a",
-        "comp-lich-1-1-b",
-        "comp-turtle-2-2-a",
-        "comp-turtle-2-2-b"
+        "strike",
+        "shield",
+        "dodge",
+        "comp-griffin-0-0-a",
+        "comp-griffin-0-0-b",
+        "comp-wyvern-1-1-a",
+        "comp-wyvern-1-1-b",
+        "comp-golem-2-2-a",
+        "comp-golem-2-2-b"
       ]
     },
-    "hand": [
-      "strike",
-      "shield",
-      "dodge",
-      "comp-sprite-0-0-a",
-      "comp-sprite-0-0-b"
-    ],
+    "hand": [],
     "discard": [],
-    "position": "node-8"
+    "position": "start",
+    "encounterCount": 0
   },
   "graph": {
     "nodes": [
@@ -37,38 +38,41 @@
       },
       {
         "id": "node-1",
-        "title": "Battle 2",
-        "icon": "⚔️",
+        "title": "Hard Battle 2",
+        "icon": "💀",
         "layout": {
           "x": 15,
-          "y": 17
+          "y": 25
         },
         "event": {
-          "type": "hard battle"
+          "type": "hard battle",
+          "area": "forest"
         }
       },
       {
         "id": "node-2",
-        "title": "Treasure 3",
-        "icon": "🎁",
+        "title": "Power Up 3",
+        "icon": "⚡",
         "layout": {
-          "x": 32.5,
-          "y": 17
+          "x": 25,
+          "y": 25
         },
         "event": {
-          "type": "treasure"
+          "type": "power up",
+          "area": "forest"
         }
       },
       {
         "id": "node-3",
-        "title": "Battle 4",
-        "icon": "⚔️",
+        "title": "Rest 4",
+        "icon": "🛌",
         "layout": {
-          "x": 50,
-          "y": 17
+          "x": 35,
+          "y": 25
         },
         "event": {
-          "type": "new object"
+          "type": "rest",
+          "area": "forest"
         }
       },
       {
@@ -76,11 +80,11 @@
         "title": "Battle 5",
         "icon": "⚔️",
         "layout": {
-          "x": 67.5,
-          "y": 17
+          "x": 45,
+          "y": 25
         },
         "event": {
-          "type": "new object"
+          "type": "hard battle"
         }
       },
       {
@@ -88,11 +92,11 @@
         "title": "Battle 6",
         "icon": "⚔️",
         "layout": {
-          "x": 85,
-          "y": 17
+          "x": 55,
+          "y": 25
         },
         "event": {
-          "type": "power up"
+          "type": "new object"
         }
       },
       {
@@ -100,56 +104,59 @@
         "title": "Rest 7",
         "icon": "🛌",
         "layout": {
-          "x": 15,
-          "y": 33
+          "x": 65,
+          "y": 25
         },
         "event": {
-          "type": "power up"
+          "type": "rest",
+          "area": "forest"
         }
       },
       {
         "id": "node-7",
-        "title": "Treasure 8",
-        "icon": "🎁",
+        "title": "Battle 8",
+        "icon": "⚔️",
         "layout": {
-          "x": 32.5,
-          "y": 33
+          "x": 75,
+          "y": 25
         },
         "event": {
-          "type": "treasure"
+          "type": "new object"
         }
       },
       {
         "id": "node-8",
-        "title": "Battle 9",
-        "icon": "⚔️",
+        "title": "Treasure 9",
+        "icon": "🎁",
         "layout": {
-          "x": 50,
-          "y": 33
+          "x": 85,
+          "y": 25
         },
         "event": {
-          "type": "battle"
+          "type": "treasure",
+          "area": "forest"
         }
       },
       {
         "id": "node-9",
-        "title": "Battle 10",
-        "icon": "⚔️",
+        "title": "Treasure 10",
+        "icon": "🎁",
         "layout": {
-          "x": 67.5,
-          "y": 33
+          "x": 15,
+          "y": 50
         },
         "event": {
-          "type": "battle"
+          "type": "treasure",
+          "area": "dungeon"
         }
       },
       {
         "id": "node-10",
-        "title": "Power Up 11",
-        "icon": "⚡",
+        "title": "Battle 11",
+        "icon": "⚔️",
         "layout": {
-          "x": 85,
-          "y": 33
+          "x": 26.666666666666664,
+          "y": 50
         },
         "event": {
           "type": "power up"
@@ -157,98 +164,106 @@
       },
       {
         "id": "node-11",
-        "title": "Rest 12",
-        "icon": "🛌",
+        "title": "Battle 12",
+        "icon": "⚔️",
         "layout": {
-          "x": 15,
+          "x": 38.33333333333333,
           "y": 50
         },
         "event": {
-          "type": "battle"
+          "type": "battle",
+          "area": "dungeon"
         }
       },
       {
         "id": "node-12",
-        "title": "Treasure 13",
-        "icon": "🎁",
+        "title": "Battle 13",
+        "icon": "⚔️",
         "layout": {
-          "x": 38.33333333333333,
+          "x": 50,
           "y": 50
         },
         "event": {
-          "type": "treasure"
+          "type": "battle",
+          "area": "dungeon"
         }
       },
       {
         "id": "node-13",
-        "title": "Battle 14",
-        "icon": "⚔️",
+        "title": "Power Up 14",
+        "icon": "⚡",
         "layout": {
           "x": 61.666666666666664,
           "y": 50
         },
         "event": {
-          "type": "battle"
+          "type": "power up",
+          "area": "dungeon"
         }
       },
       {
         "id": "node-14",
-        "title": "Rest 15",
-        "icon": "🛌",
+        "title": "Battle 15",
+        "icon": "⚔️",
+        "layout": {
+          "x": 73.33333333333334,
+          "y": 50
+        },
+        "event": {
+          "type": "battle",
+          "area": "dungeon"
+        }
+      },
+      {
+        "id": "node-15",
+        "title": "Treasure 16",
+        "icon": "🎁",
         "layout": {
           "x": 85,
           "y": 50
         },
         "event": {
-          "type": "battle"
-        }
-      },
-      {
-        "id": "node-15",
-        "title": "Rest 16",
-        "icon": "🛌",
-        "layout": {
-          "x": 15,
-          "y": 67
-        },
-        "event": {
-          "type": "rest"
+          "type": "treasure",
+          "area": "dungeon"
         }
       },
       {
         "id": "node-16",
-        "title": "Rest 17",
-        "icon": "🛌",
+        "title": "Treasure 17",
+        "icon": "🎁",
         "layout": {
-          "x": 38.33333333333333,
-          "y": 67
+          "x": 15,
+          "y": 75
         },
         "event": {
-          "type": "rest"
+          "type": "treasure",
+          "area": "ruins"
         }
       },
       {
         "id": "node-17",
-        "title": "Treasure 18",
-        "icon": "🎁",
+        "title": "Battle 18",
+        "icon": "⚔️",
         "layout": {
-          "x": 61.666666666666664,
-          "y": 67
+          "x": 26.666666666666664,
+          "y": 75
         },
         "event": {
-          "type": "treasure"
+          "type": "battle",
+          "area": "ruins"
         }
       },
       {
         "id": "node-18",
-        "title": "Battle 19",
-        "icon": "⚔️",
+        "title": "Treasure 19",
+        "icon": "🎁",
         "layout": {
-          "x": 85,
-          "y": 67
+          "x": 38.33333333333333,
+          "y": 75
         },
         "event": {
-          "type": "battle"
+          "type": "treasure",
+          "area": "ruins"
         }
       },
       {
@@ -256,11 +271,12 @@
         "title": "Battle 20",
         "icon": "⚔️",
         "layout": {
-          "x": 15,
-          "y": 83
+          "x": 50,
+          "y": 75
         },
         "event": {
-          "type": "battle"
+          "type": "battle",
+          "area": "ruins"
         }
       },
       {
@@ -268,11 +284,12 @@
         "title": "Battle 21",
         "icon": "⚔️",
         "layout": {
-          "x": 38.33333333333333,
-          "y": 83
+          "x": 61.666666666666664,
+          "y": 75
         },
         "event": {
-          "type": "battle"
+          "type": "battle",
+          "area": "ruins"
         }
       },
       {
@@ -280,23 +297,25 @@
         "title": "Battle 22",
         "icon": "⚔️",
         "layout": {
-          "x": 61.666666666666664,
-          "y": 83
+          "x": 73.33333333333334,
+          "y": 75
         },
         "event": {
-          "type": "battle"
+          "type": "battle",
+          "area": "ruins"
         }
       },
       {
         "id": "node-22",
-        "title": "Hard Battle 23",
-        "icon": "💀",
+        "title": "Battle 23",
+        "icon": "⚔️",
         "layout": {
           "x": 85,
-          "y": 83
+          "y": 75
         },
         "event": {
-          "type": "hard battle"
+          "type": "battle",
+          "area": "ruins"
         }
       },
       {
@@ -315,18 +334,6 @@
     "edges": [
       {
         "from": "start",
-        "to": "node-3"
-      },
-      {
-        "from": "start",
-        "to": "node-2"
-      },
-      {
-        "from": "start",
-        "to": "node-1"
-      },
-      {
-        "from": "start",
         "to": "node-4"
       },
       {
@@ -334,148 +341,160 @@
         "to": "node-5"
       },
       {
-        "from": "node-1",
+        "from": "start",
+        "to": "node-1"
+      },
+      {
+        "from": "start",
+        "to": "node-2"
+      },
+      {
+        "from": "start",
+        "to": "node-3"
+      },
+      {
+        "from": "start",
         "to": "node-6"
       },
       {
-        "from": "node-1",
+        "from": "start",
         "to": "node-7"
       },
       {
-        "from": "node-2",
-        "to": "node-7"
-      },
-      {
-        "from": "node-2",
-        "to": "node-6"
-      },
-      {
-        "from": "node-3",
+        "from": "start",
         "to": "node-8"
       },
       {
-        "from": "node-3",
-        "to": "node-7"
-      },
-      {
-        "from": "node-4",
+        "from": "node-1",
         "to": "node-9"
       },
       {
-        "from": "node-4",
-        "to": "node-8"
-      },
-      {
-        "from": "node-5",
+        "from": "node-1",
         "to": "node-10"
       },
       {
-        "from": "node-5",
+        "from": "node-2",
+        "to": "node-10"
+      },
+      {
+        "from": "node-2",
         "to": "node-9"
       },
       {
-        "from": "node-6",
+        "from": "node-3",
         "to": "node-11"
       },
       {
-        "from": "node-6",
+        "from": "node-3",
+        "to": "node-10"
+      },
+      {
+        "from": "node-4",
         "to": "node-12"
       },
       {
-        "from": "node-7",
-        "to": "node-12"
-      },
-      {
-        "from": "node-7",
+        "from": "node-4",
         "to": "node-11"
       },
       {
-        "from": "node-8",
-        "to": "node-13"
-      },
-      {
-        "from": "node-8",
+        "from": "node-5",
         "to": "node-12"
       },
       {
-        "from": "node-9",
+        "from": "node-5",
         "to": "node-13"
       },
       {
-        "from": "node-9",
-        "to": "node-14"
-      },
-      {
-        "from": "node-10",
-        "to": "node-14"
-      },
-      {
-        "from": "node-10",
+        "from": "node-6",
         "to": "node-13"
       },
       {
-        "from": "node-11",
+        "from": "node-6",
+        "to": "node-14"
+      },
+      {
+        "from": "node-7",
+        "to": "node-14"
+      },
+      {
+        "from": "node-7",
         "to": "node-15"
       },
       {
-        "from": "node-11",
-        "to": "node-16"
-      },
-      {
-        "from": "node-12",
-        "to": "node-16"
-      },
-      {
-        "from": "node-12",
+        "from": "node-8",
         "to": "node-15"
       },
       {
-        "from": "node-13",
+        "from": "node-8",
+        "to": "node-14"
+      },
+      {
+        "from": "node-9",
+        "to": "node-16"
+      },
+      {
+        "from": "node-9",
         "to": "node-17"
       },
       {
-        "from": "node-13",
+        "from": "node-10",
+        "to": "node-17"
+      },
+      {
+        "from": "node-10",
         "to": "node-16"
       },
       {
-        "from": "node-14",
+        "from": "node-11",
         "to": "node-18"
       },
       {
-        "from": "node-14",
+        "from": "node-11",
         "to": "node-17"
       },
       {
-        "from": "node-15",
+        "from": "node-12",
         "to": "node-19"
       },
       {
-        "from": "node-15",
+        "from": "node-12",
         "to": "node-20"
       },
       {
-        "from": "node-16",
+        "from": "node-13",
         "to": "node-20"
       },
       {
-        "from": "node-16",
+        "from": "node-13",
         "to": "node-19"
       },
       {
-        "from": "node-17",
+        "from": "node-14",
         "to": "node-21"
       },
       {
-        "from": "node-17",
-        "to": "node-20"
-      },
-      {
-        "from": "node-18",
+        "from": "node-14",
         "to": "node-22"
       },
       {
-        "from": "node-18",
+        "from": "node-15",
+        "to": "node-22"
+      },
+      {
+        "from": "node-15",
         "to": "node-21"
+      },
+      {
+        "from": "node-16",
+        "to": "end"
+      },
+      {
+        "from": "node-17",
+        "to": "end"
+      },
+      {
+        "from": "node-18",
+        "to": "end"
       },
       {
         "from": "node-19",
@@ -492,18 +511,6 @@
       {
         "from": "node-22",
         "to": "end"
-      },
-      {
-        "from": "start",
-        "to": "node-8"
-      },
-      {
-        "from": "node-8",
-        "to": "node-17"
-      },
-      {
-        "from": "node-13",
-        "to": "node-21"
       }
     ]
   },
@@ -554,8 +561,8 @@
       }
     },
     {
-      "id": "comp-sprite-0-0-a",
-      "name": "Sprite Strike",
+      "id": "comp-griffin-0-0-a",
+      "name": "Griffin Strike",
       "cost": 1,
       "type": "utility",
       "description": "Companion basic attack",
@@ -569,8 +576,8 @@
       }
     },
     {
-      "id": "comp-sprite-0-0-b",
-      "name": "Sprite Guard",
+      "id": "comp-griffin-0-0-b",
+      "name": "Griffin Guard",
       "cost": 1,
       "type": "defense",
       "description": "Companion basic defence",
@@ -584,8 +591,8 @@
       }
     },
     {
-      "id": "comp-lich-1-1-a",
-      "name": "Lich Strike",
+      "id": "comp-wyvern-1-1-a",
+      "name": "Wyvern Strike",
       "cost": 1,
       "type": "attack",
       "description": "Companion basic attack",
@@ -599,8 +606,8 @@
       }
     },
     {
-      "id": "comp-lich-1-1-b",
-      "name": "Lich Guard",
+      "id": "comp-wyvern-1-1-b",
+      "name": "Wyvern Guard",
       "cost": 1,
       "type": "defense",
       "description": "Companion basic defence",
@@ -614,8 +621,8 @@
       }
     },
     {
-      "id": "comp-turtle-2-2-a",
-      "name": "Turtle Strike",
+      "id": "comp-golem-2-2-a",
+      "name": "Golem Strike",
       "cost": 1,
       "type": "defense",
       "description": "Companion basic attack",
@@ -629,8 +636,8 @@
       }
     },
     {
-      "id": "comp-turtle-2-2-b",
-      "name": "Turtle Guard",
+      "id": "comp-golem-2-2-b",
+      "name": "Golem Guard",
       "cost": 1,
       "type": "defense",
       "description": "Companion basic defence",
@@ -646,219 +653,188 @@
   ],
   "companions": [
     {
-      "id": "sprite-0",
-      "name": "Sprite",
+      "id": "griffin-0",
+      "name": "Griffin",
       "type": "utility",
-      "element": "water",
-      "life": 20,
-      "energy": 4,
+      "element": "air",
+      "life": 23,
+      "energy": 3,
       "energyRefill": 2,
       "priceDecks": {
         "common": [
           {
-            "id": "sprite-dash",
-            "name": "Quick Dash",
+            "id": "griffin-glide",
+            "name": "Sky Glide",
             "cost": 1,
             "type": "utility",
             "properties": {
-              "move": 1
+              "evade": 1
             },
-            "element": "water"
+            "element": "air"
           },
           {
-            "id": "sprite-gale",
-            "name": "Breeze",
+            "id": "griffin-screech",
+            "name": "Screech",
             "cost": 1,
             "type": "utility",
             "properties": {
-              "draw": 1
+              "debuff": true
             },
-            "element": "water"
+            "element": "air"
           }
         ],
         "uncommon": [
           {
-            "id": "sprite-splash",
-            "name": "Aqua Puff",
-            "cost": 2,
-            "type": "defense",
-            "properties": {
-              "shield": 5
-            },
-            "element": "water"
-          }
-        ],
-        "rare": [
-          {
-            "id": "sprite-starlight",
-            "name": "Starlight",
-            "cost": 3,
-            "type": "utility",
-            "properties": {
-              "heal": 4
-            },
-            "element": "water"
-          }
-        ]
-      },
-      "maxEnergy": 4,
-      "maxLife": 20
-    },
-    {
-      "id": "lich-1",
-      "name": "Lich",
-      "type": "attack",
-      "element": "shadow",
-      "life": 22,
-      "energy": 3,
-      "energyRefill": 1,
-      "priceDecks": {
-        "common": [
-          {
-            "id": "lich-bolt",
-            "name": "Soul Bolt",
-            "cost": 1,
-            "type": "attack",
-            "properties": {
-              "damage": 3
-            },
-            "element": "shadow"
-          },
-          {
-            "id": "lich-wisp",
-            "name": "Wisp",
-            "cost": 1,
-            "type": "utility",
-            "properties": {
-              "weaken": true
-            },
-            "element": "shadow"
-          }
-        ],
-        "uncommon": [
-          {
-            "id": "lich-chain",
-            "name": "Chain Curse",
+            "id": "griffin-strike",
+            "name": "Aerial Strike",
             "cost": 2,
             "type": "attack",
             "properties": {
               "damage": 5
             },
-            "element": "shadow"
+            "element": "air"
           }
         ],
         "rare": [
           {
-            "id": "lich-veil",
-            "name": "Death Veil",
+            "id": "griffin-gale",
+            "name": "Gale Force",
             "cost": 3,
-            "type": "defense",
+            "type": "utility",
             "properties": {
-              "block": 7
+              "draw": 2
             },
-            "element": "shadow"
+            "element": "air"
           }
         ]
       },
       "maxEnergy": 3,
-      "maxLife": 22
+      "maxLife": 23,
+      "nextLevelExp": null
     },
     {
-      "id": "turtle-2",
-      "name": "Turtle",
+      "id": "wyvern-1",
+      "name": "Wyvern",
+      "type": "attack",
+      "element": "fire",
+      "life": 26,
+      "energy": 3,
+      "energyRefill": 1,
+      "priceDecks": {
+        "common": [
+          {
+            "id": "wyvern-claw",
+            "name": "Wyvern Claw",
+            "cost": 1,
+            "type": "attack",
+            "properties": {
+              "damage": 3
+            },
+            "element": "fire"
+          },
+          {
+            "id": "wyvern-fly",
+            "name": "Winged Leap",
+            "cost": 1,
+            "type": "utility",
+            "properties": {
+              "evade": 1
+            },
+            "element": "fire"
+          }
+        ],
+        "uncommon": [
+          {
+            "id": "wyvern-breath",
+            "name": "Flame Breath",
+            "cost": 2,
+            "type": "attack",
+            "properties": {
+              "damage": 6
+            },
+            "element": "fire"
+          }
+        ],
+        "rare": [
+          {
+            "id": "wyvern-ember",
+            "name": "Ember Storm",
+            "cost": 3,
+            "type": "attack",
+            "properties": {
+              "damage": 10
+            },
+            "element": "fire"
+          }
+        ]
+      },
+      "maxEnergy": 3,
+      "maxLife": 26,
+      "nextLevelExp": null
+    },
+    {
+      "id": "golem-2",
+      "name": "Golem",
       "type": "defense",
-      "element": "arcane",
-      "life": 24,
+      "element": "earth",
+      "life": 28,
       "energy": 2,
       "energyRefill": 1,
       "priceDecks": {
         "common": [
           {
-            "id": "turtle-shell",
-            "name": "Shell Bash",
+            "id": "golem-block",
+            "name": "Rock Block",
             "cost": 1,
             "type": "defense",
             "properties": {
               "block": 4
             },
-            "element": "arcane"
+            "element": "earth"
           },
           {
-            "id": "turtle-lash",
-            "name": "Tail Lash",
+            "id": "golem-rumble",
+            "name": "Ground Rumble",
             "cost": 1,
-            "type": "attack",
+            "type": "utility",
             "properties": {
-              "damage": 2
+              "taunt": true
             },
-            "element": "arcane"
+            "element": "earth"
           }
         ],
         "uncommon": [
           {
-            "id": "turtle-wave",
-            "name": "Tidal Wave",
+            "id": "golem-guard",
+            "name": "Iron Guard",
             "cost": 2,
-            "type": "utility",
+            "type": "defense",
             "properties": {
-              "slow": true
+              "block": 8
             },
-            "element": "arcane"
+            "element": "earth"
           }
         ],
         "rare": [
           {
-            "id": "turtle-fortress",
-            "name": "Fortress",
+            "id": "golem-quake",
+            "name": "Earthquake",
             "cost": 3,
-            "type": "defense",
+            "type": "utility",
             "properties": {
-              "block": 10
+              "stun": true
             },
-            "element": "arcane"
+            "element": "earth"
           }
         ]
       },
       "maxEnergy": 2,
-      "maxLife": 24
+      "maxLife": 28,
+      "nextLevelExp": null
     }
   ],
   "history": [
     "New run created",
-    "Companions finalised � starting deck built",
-    "moved to node-3",
-    "moved to node-8",
-    "Battle started — opening hand dealt"
-  ],
-  "battle": {
-    "active": true,
-    "turn": 1,
-    "log": [
-      "Battle started!"
-    ],
-    "enemies": [
-      {
-        "id": "wild-1",
-        "name": "Wild Wolf",
-        "life": 18,
-        "maxLife": 18,
-        "shield": 0,
-        "energy": 2,
-        "maxEnergy": 2,
-        "element": "earth",
-        "type": "Beast"
-      },
-      {
-        "id": "wild-2",
-        "name": "Stone Golem",
-        "life": 22,
-        "maxLife": 22,
-        "shield": 0,
-        "energy": 1,
-        "maxEnergy": 1,
-        "element": "earth",
-        "type": "Construct"
-      }
-    ]
-  }
+    "Companions finalised — starting deck built"
+  ]
 }

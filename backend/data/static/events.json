@@ -1,0 +1,86 @@
+[
+  {
+    "id": "battle",
+    "type": "battle",
+    "displayName": "Battle",
+    "description": "A random monster encounter.",
+    "icon": "⚔️",
+    "spawnRules": {
+      "min": 0,
+      "max": null,
+      "allowedAreas": ["forest", "dungeon", "ruins", "volcano"]
+    },
+    "monsterSpawning": {
+      "poolFilter": { "areas": ["forest", "dungeon", "ruins", "volcano"] },
+      "countMin": 1,
+      "countMax": 2,
+      "difficultyModifier": 1.0
+    },
+    "extraRules": [],
+    "notes": ""
+  },
+  {
+    "id": "hard-battle",
+    "type": "hard battle",
+    "displayName": "Hard Battle",
+    "description": "A tougher encounter with elite enemies.",
+    "icon": "💀",
+    "spawnRules": {
+      "min": 2,
+      "max": 5,
+      "allowedAreas": ["dungeon", "ruins", "volcano"]
+    },
+    "monsterSpawning": {
+      "poolFilter": { "areas": ["dungeon", "ruins", "volcano"], "minLevel": 3 },
+      "countMin": 1,
+      "countMax": 3,
+      "difficultyModifier": 1.5
+    },
+    "extraRules": ["Enemies start with +20% HP", "No rest between encounters"],
+    "notes": "Intended for mid-to-late map layers."
+  },
+  {
+    "id": "rest",
+    "type": "rest",
+    "displayName": "Rest Site",
+    "description": "The party recovers HP and energy.",
+    "icon": "🛌",
+    "spawnRules": { "min": 0, "max": 2, "allowedAreas": null },
+    "monsterSpawning": null,
+    "extraRules": ["Restore 30% of max HP to all companions"],
+    "notes": ""
+  },
+  {
+    "id": "new-object",
+    "type": "new object",
+    "displayName": "New Object",
+    "description": "Discover a new item or relic.",
+    "icon": "🪄",
+    "spawnRules": { "min": 2, "max": 4, "allowedAreas": null },
+    "monsterSpawning": null,
+    "extraRules": [],
+    "notes": ""
+  },
+  {
+    "id": "power-up",
+    "type": "power up",
+    "displayName": "Power Up",
+    "description": "A companion gains a boost.",
+    "icon": "⚡",
+    "spawnRules": { "min": 3, "max": 6, "allowedAreas": null },
+    "monsterSpawning": null,
+    "extraRules": [],
+    "notes": ""
+  },
+  {
+    "id": "treasure",
+    "type": "treasure",
+    "displayName": "Treasure",
+    "description": "Find gold or rare cards.",
+    "icon": "📜",
+    "spawnRules": { "min": 0, "max": null, "allowedAreas": null },
+    "monsterSpawning": null,
+    "extraRules": [],
+    "notes": ""
+  }
+]

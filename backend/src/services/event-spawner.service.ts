@@ -1,34 +1,48 @@
 import { NodeDefinition } from '../models/node';
+import { EventRepository } from '../repo/event-repo';
+import { EventDefinition } from '../models/event-definition';
 
 export interface EventSpec {
   name: string;
   min: number;
-  max: number | null; // null for unlimited
+  max: number | null;
 }
 
-const EVENT_SPECS: Record<string, EventSpec> = {
-  battle: { name: 'battle', min: 0, max: null },
-  rest: { name: 'rest', min: 0, max: 2 },
-  'hard battle': { name: 'hard battle', min: 2, max: 5 },
-  'new object': { name: 'new object', min: 2, max: 4 },
-  'power up': { name: 'power up', min: 3, max: 6 }
-};
-
 export class EventSpawnerService {
-  getSpecs() {
-    return Object.values(EVENT_SPECS);
+  private eventRepo = new EventRepository();
+
+  /** Return legacy-shaped specs derived from the static JSON definitions. */
+  async getSpecs(): Promise<EventSpec[]> {
+    const defs = await this.eventRepo.getAll();
+    return defs.map(d => ({
+      name: d.type,
+      min:  d.spawnRules.min,
+      max:  d.spawnRules.max,
+    }));
   }
 
-  validateCount(eventType: string, count: number) {
-    const spec = (EVENT_SPECS as any)[eventType];
-    if (!spec) return { valid: false, reason: 'unknown event type' };
-    if (spec.max !== null && count > spec.max) return { valid: false, reason: `exceeds max ${spec.max}` };
-    if (count < spec.min) return { valid: false, reason: `below min ${spec.min}` };
+  async validateCount(eventType: string, count: number): Promise<{ valid: boolean; reason?: string }> {
+    const def = await this.eventRepo.getByType(eventType);
+    if (!def) return { valid: false, reason: 'unknown event type' };
+    const { min, max } = def.spawnRules;
+    if (max !== null && count > max) return { valid: false, reason: `exceeds max ${max}` };
+    if (count < min) return { valid: false, reason: `below min ${min}` };
     return { valid: true };
   }
 
-  // Assign events to nodes while enforcing spawn caps.
-  assignEvents(nodes: NodeDefinition[]) {
+  /**
+   * Assign events to nodes while enforcing spawn caps read from events.json.
+   * Nodes whose event count exceeds max are demoted to 'battle';
+   * under-represented types are promoted from 'battle' nodes.
+   */
+  async assignEvents(nodes: NodeDefinition[]): Promise<NodeDefinition[]> {
+    const defs = await this.eventRepo.getAll();
+    // Build a lookup: event type -> spawn rules
+    const rulesMap = new Map<string, { min: number; max: number | null }>();
+    for (const d of defs) {
+      rulesMap.set(d.type, { min: d.spawnRules.min, max: d.spawnRules.max });
+    }
+
     // Count existing events
     const counts: Record<string, number> = {};
     nodes.forEach(n => {
@@ -36,18 +50,17 @@ export class EventSpawnerService {
       counts[t] = (counts[t] || 0) + 1;
     });
 
-    // Ensure max caps: reduce any event exceeding its max by converting extras to 'battle'
-    for (const key of Object.keys(EVENT_SPECS)) {
-      const spec = (EVENT_SPECS as any)[key] as EventSpec;
-      if (spec.max === null) continue;
-      const current = counts[key] || 0;
-      if (current > spec.max) {
-        let toRemove = current - spec.max;
+    // Ensure max caps: demote excess to 'battle'
+    for (const [type, rules] of rulesMap.entries()) {
+      if (rules.max === null) continue;
+      const current = counts[type] || 0;
+      if (current > rules.max) {
+        let toRemove = current - rules.max;
         for (const node of nodes) {
           if (toRemove <= 0) break;
-          if (node.event?.type === key) {
+          if (node.event?.type === type) {
             node.event.type = 'battle';
-            counts[key] -= 1;
+            counts[type] -= 1;
             counts['battle'] = (counts['battle'] || 0) + 1;
             toRemove -= 1;
           }
@@ -55,17 +68,16 @@ export class EventSpawnerService {
       }
     }
 
-    // Ensure min caps: promote 'battle' nodes into under-represented event types
-    for (const key of Object.keys(EVENT_SPECS)) {
-      const spec = (EVENT_SPECS as any)[key] as EventSpec;
-      const current = counts[key] || 0;
-      if (current < spec.min) {
-        let need = spec.min - current;
+    // Ensure min caps: promote 'battle' nodes into under-represented types
+    for (const [type, rules] of rulesMap.entries()) {
+      const current = counts[type] || 0;
+      if (current < rules.min) {
+        let need = rules.min - current;
         for (const node of nodes) {
           if (need <= 0) break;
           if ((node.event?.type ?? 'battle') === 'battle' && node.id !== 'start' && node.id !== 'end') {
-            node.event = { type: key } as any;
-            counts[key] = (counts[key] || 0) + 1;
+            node.event = { type } as any;
+            counts[type] = (counts[type] || 0) + 1;
             counts['battle'] = Math.max((counts['battle'] || 0) - 1, 0);
             need -= 1;
           }

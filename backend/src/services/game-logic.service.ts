@@ -9,8 +9,8 @@ export class GameLogicService {
   private mapGenerator = new MapGeneratorService();
   private eventSpawner = new EventSpawnerService();
 
-  createInitialState(): GameState {
-        const cards: Card[] = [
+    async createInitialState(): Promise<GameState> {
+    const cards: Card[] = [
       {
         id: 'strike', name: 'Strike', cost: 1, type: 'attack',
         properties: { damage: 3 },
@@ -48,18 +48,20 @@ export class GameLogicService {
 
     const graph = this.mapGenerator.generate({ minNodes: 20, maxNodes: 24, minLayers: 5, maxLayers: 7 });
     // enforce event spawn rules on generated nodes
-    graph.nodes = this.eventSpawner.assignEvents(graph.nodes);
+        graph.nodes = await this.eventSpawner.assignEvents(graph.nodes);
     const deck: Deck = { cardIds: cards.map(card => card.id) };
 
-    return {
-      player: {
+        return {
+            player: {
         id: 'player-1',
         life: 20,
         mana: 3,
+        gold: 0,
         deck,
         hand: ['strike', 'shield', 'focus'],
         discard: [],
-        position: 'start'
+        position: 'start',
+        encounterCount: 0,
       },
       graph,
       cards,

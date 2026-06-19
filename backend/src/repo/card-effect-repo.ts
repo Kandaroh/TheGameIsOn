@@ -10,7 +10,7 @@ import { CardEffect } from '../models/card-effect';
 export class CardEffectRepository {
   private readonly filePath = path.resolve(
     __dirname,
-    '../../backend-data/card-effects.json'
+    '../../data/static/card-effects.json'
   );
 
   private cache: Map<string, CardEffect> | null = null;

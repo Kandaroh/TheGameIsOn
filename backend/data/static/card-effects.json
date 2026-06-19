@@ -1,0 +1,136 @@
+[
+  {
+    "id": "fx-strike-normal",
+    "description": "Deal 3 damage to one enemy.",
+    "action": "damage",
+    "value": 3,
+    "target": "wildMonster"
+  },
+  {
+    "id": "fx-strike-enhanced",
+    "description": "Deal 5 damage to one enemy.",
+    "action": "damage",
+    "value": 5,
+    "target": "wildMonster"
+  },
+  {
+    "id": "fx-shield-normal",
+    "description": "Gain 2 shield.",
+    "action": "shield",
+    "value": 2,
+    "target": "companion"
+  },
+  {
+    "id": "fx-shield-enhanced",
+    "description": "Gain 4 shield.",
+    "action": "shield",
+    "value": 4,
+    "target": "companion"
+  },
+  {
+    "id": "fx-dodge-normal",
+    "description": "Evade the next attack.",
+    "action": "evade",
+    "value": 1,
+    "target": "companion"
+  },
+  {
+    "id": "fx-dodge-enhanced",
+    "description": "Evade the next attack and draw 1 card.",
+    "action": "evade_draw",
+    "value": 1,
+    "target": "companion"
+  },
+  {
+    "id": "fx-comp-strike-normal",
+    "description": "Deal 4 damage to one enemy.",
+    "action": "damage",
+    "value": 4,
+    "target": "wildMonster"
+  },
+  {
+    "id": "fx-comp-strike-enhanced",
+    "description": "Deal 6 damage to one enemy.",
+    "action": "damage",
+    "value": 6,
+    "target": "wildMonster"
+  },
+  {
+    "id": "fx-comp-guard-normal",
+    "description": "Gain 3 shield.",
+    "action": "shield",
+    "value": 3,
+    "target": "companion"
+  },
+  {
+    "id": "fx-comp-guard-enhanced",
+    "description": "Gain 5 shield.",
+    "action": "shield",
+    "value": 5,
+    "target": "companion"
+  },
+  {
+    "id": "fx-enemy-bite",
+    "description": "Deal 4 damage to one companion.",
+    "action": "damage",
+    "value": 4,
+    "target": "companion"
+  },
+  {
+    "id": "fx-enemy-howl",
+    "description": "Deal 2 damage to one companion.",
+    "action": "damage",
+    "value": 2,
+    "target": "companion"
+  },
+  {
+    "id": "fx-enemy-slam",
+    "description": "Deal 6 damage to one companion.",
+    "action": "damage",
+    "value": 6,
+    "target": "companion"
+  },
+  {
+    "id": "fx-enemy-harden",
+    "description": "Gain 3 shield.",
+    "action": "shield",
+    "value": 3,
+    "target": "companion"
+  },
+
+  {"id": "fx-fire-aura",      "description": "Attack cards deal +1 damage.",                       "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-ember-shield",   "description": "Gain 1 shield when playing an attack card.",         "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-heat-surge",     "description": "First attack card each turn costs 0 energy.",        "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-inferno-heart",  "description": "Fire cards deal +2 damage to enemies below 50% HP.", "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-scorch-aura",    "description": "Enemies that attack this companion take 1 damage.",  "action": "damage", "value": 0, "target": "companion"},
+
+  {"id": "fx-stone-wall",     "description": "Defense cards grant +1 shield.",                      "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-iron-skin",      "description": "Start each combat with 3 shield.",                    "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-retaliate",      "description": "Deal 1 damage to attackers when hit.",                "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-fortify",        "description": "Shield does not expire between turns.",               "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-earthquake",     "description": "Defense cards deal 1 damage to all enemies.",         "action": "damage", "value": 0, "target": "companion"},
+
+  {"id": "fx-tidal-gift",     "description": "Draw 1 extra card at the start of each turn.",        "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-mist-veil",      "description": "Utility cards grant 1 shield to this companion.",     "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-flow-state",     "description": "Utility cards cost 1 less energy.",                   "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-aqua-regen",     "description": "Heal 1 HP at the start of each turn.",                "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-torrent",        "description": "Water cards heal this companion for 2 HP.",           "action": "damage", "value": 0, "target": "companion"},
+
+  {"id": "fx-soul-siphon",    "description": "Heal 1 HP when killing an enemy.",                    "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-dark-pact",      "description": "Attack cards deal +1 damage but cost 1 HP.",          "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-shadow-cloak",   "description": "20% chance to evade any attack.",                     "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-necrotic-aura",  "description": "Enemies lose 1 HP at the start of your turn.",        "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-void-bolt",      "description": "Shadow cards deal +2 damage.",                        "action": "damage", "value": 0, "target": "companion"},
+
+  {"id": "fx-arcane-ward",    "description": "Gain 2 shield at the start of each turn.",            "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-shell-bash",     "description": "Convert excess shield into damage to one enemy.",     "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-mystic-shell",   "description": "Defense cards also heal 1 HP.",                       "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-slow-aura",      "description": "Enemies deal 1 less damage to this companion.",       "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-arcane-echo",    "description": "Arcane cards have a 25% chance to be played twice.",  "action": "damage", "value": 0, "target": "companion"},
+
+  {"id": "fx-tailwind",       "description": "Gain +1 energy refill per turn.",                     "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-sky-dodge",      "description": "15% chance to evade any attack.",                     "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-keen-eye",       "description": "Draw 1 extra card when playing a utility card.",      "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-gust-shield",    "description": "Air cards grant 2 shield.",                           "action": "damage", "value": 0, "target": "companion"},
+  {"id": "fx-updraft",        "description": "Heal 2 HP when playing a utility card.",              "action": "damage", "value": 0, "target": "companion"}
+]

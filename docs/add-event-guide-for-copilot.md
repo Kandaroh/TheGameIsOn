@@ -1,14 +1,19 @@
 # Guide: Adding Node Events (for GitHub Copilot)
 
+> This guide is a step-by-step walkthrough. For architecture context see [docs/architecture.md](architecture.md).  
+> For the event types table and spawn rules see [docs/game-events-spec.md](game-events-spec.md).  
+> For the `EventDefinition` model see [docs/data-model.md](data-model.md).
+
 Purpose
 - A concise, machine-friendly guide explaining where and how to add new node event types so Copilot can make targeted edits reliably.
 
 Key files
-- `backend/src/models/node-event.ts` — canonical event type definitions.
+- `backend/src/models/node-event.ts` — canonical event type definitions (+ `MapArea`).
+- `backend/data/static/events.json` — `EventDefinition` entries with spawn rules + monster spawn config.
+- `backend/src/repo/event-repo.ts` — reads and caches `events.json`.
 - `backend/src/services/map-generator.service.ts` — decides event assignment (`randomEventType()` and `nodeIcons`).
+- `backend/src/services/event-spawner.service.ts` — enforces spawn min/max caps from `events.json`.
 - `backend/src/models/node.ts` — node shape persisted on disk.
-- `backend/src/services/game-logic.service.ts` — runtime behavior when a player enters a non-battle node.
-- `backend/src/services/battle.service.ts` — runtime behavior for battle card plays and enemy turns.
 - `backend/src/controllers/game.controller.ts` — expose any new API endpoints if needed.
 - `frontend/src/app/shared/models/node.model.ts` — frontend node type, must match persisted shape.
 - `frontend/src/app/features/map/map.component.ts` — how the node is displayed on the map (icons, title).

@@ -1,5 +1,5 @@
 import { NodeDefinition } from '../models/node';
-import { NodeEventType } from '../models/node-event';
+import { NodeEventType, MapArea } from '../models/node-event';
 
 interface MapGenerationOptions {
   minNodes?: number;
@@ -20,26 +20,50 @@ const nodeIcons: Record<string, string> = {
 };
 
 export class MapGeneratorService {
+    /**
+   * Map areas assigned in order of progression.
+   * Layer depth is divided into equal buckets; each bucket maps to one zone.
+   */
+  private static readonly AREA_PROGRESSION: MapArea[] = [
+    'forest',
+    'dungeon',
+    'ruins',
+    'volcano',
+  ];
+
+  /** Returns the zone for an intermediate layer index (0-based, excludes start/end). */
+  private areaForLayer(layerIndex: number, totalIntermediateLayers: number): MapArea {
+    const areas  = MapGeneratorService.AREA_PROGRESSION;
+    const bucket = Math.min(
+      Math.floor((layerIndex / totalIntermediateLayers) * areas.length),
+      areas.length - 1
+    );
+    return areas[bucket];
+  }
+
   generate(options: MapGenerationOptions = {}): { nodes: NodeDefinition[]; edges: Array<{ from: string; to: string }> } {
     const totalNodes = this.randomInt(options.minNodes ?? 20, options.maxNodes ?? 24);
     const layerCount = this.randomInt(options.minLayers ?? 5, options.maxLayers ?? 7);
     const intermediateNodes = totalNodes - 2;
     const layerSizes = this.distributeNodes(intermediateNodes, layerCount - 2);
+    const intermediateLayers = layerCount - 2; // excludes start + end
     const layers: NodeDefinition[][] = [];
 
     layers.push([this.buildNode('start', 'Start', 'start', { x: 50, y: 0 })]);
 
     let nodeIndex = 1;
     for (let layer = 1; layer < layerCount - 1; layer++) {
-      const count = layerSizes[layer - 1];
-      const y = Math.round((layer * 100) / (layerCount - 1));
-      const layerNodes = Array.from({ length: count }, (_, index) => {
+      const count        = layerSizes[layer - 1];
+      const y            = Math.round((layer * 100) / (layerCount - 1));
+      const area         = this.areaForLayer(layer - 1, intermediateLayers);
+      const layerNodes   = Array.from({ length: count }, (_, index) => {
         const eventType = this.randomEventType();
         return this.buildNode(
           `node-${nodeIndex++}`,
           `${this.nodeTitle(eventType)} ${nodeIndex}`,
           eventType,
-          this.positionForLayer(index, count, y)
+          this.positionForLayer(index, count, y),
+          area
         );
       });
       layers.push(layerNodes);
@@ -74,15 +98,21 @@ export class MapGeneratorService {
     return { nodes, edges };
   }
 
-  private buildNode(id: string, title: string, eventType: string, layout: { x: number; y: number }): NodeDefinition {
+    private buildNode(
+    id: string,
+    title: string,
+    eventType: string,
+    layout: { x: number; y: number },
+    area?: MapArea
+  ): NodeDefinition {
     return {
       id,
       title,
       icon: nodeIcons[eventType] || '◯',
       layout,
       event: {
-        // start nodes keep 'start', end nodes should emit an 'end' event
-        type: eventType === 'start' ? 'start' : eventType === 'end' ? 'end' : eventType
+        type: eventType === 'start' ? 'start' : eventType === 'end' ? 'end' : eventType,
+        ...(area ? { area } : {}),
       }
     };
   }

@@ -1,12 +1,21 @@
 ﻿import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { GameStateModel } from '../models/game-state.model';
+import { GameStateModel, PendingAbilityChoice } from '../models/game-state.model';
 import { NodeModel } from '../models/node.model';
 import { CompanionModel } from '../models/companion.model';
 import { CardModel } from '../models/card.model';
+import { EnemyTurnAction } from '../models/battle-state.model';
 
-export type GameScreen = 'menu' | 'companion-select' | 'map' | 'battle' | 'event';
+export type GameScreen =
+  | 'menu'
+  | 'companion-select'
+  | 'map'
+  | 'battle'
+  | 'event'
+  | 'combat-results'
+  | 'card-reward';
 
 @Injectable({ providedIn: 'root' })
 export class GameStateService {
@@ -14,6 +23,12 @@ export class GameStateService {
   screen$ = new BehaviorSubject<GameScreen>('menu');
   currentEvent$ = new BehaviorSubject<string | null>(null);
   optionsOpen$ = new BehaviorSubject(false);
+  playerInfoOpen$ = new BehaviorSubject(false);
+  endTurnResult$ = new Subject<EnemyTurnAction[]>();
+  /** Emits the first pending ability choice (if any) whenever state changes. */
+  pendingAbilityChoice$ = this.state$.pipe(
+    map(s => (s?.pendingAbilityChoices ?? [])[0] ?? null)
+  );
   debugMode = false;
 
   setDebugMode(enabled: boolean) { this.debugMode = enabled; }
@@ -48,6 +63,18 @@ export class GameStateService {
   openOptions()  { this.optionsOpen$.next(true); }
   closeOptions() { this.optionsOpen$.next(false); }
   toggleOptions() { this.optionsOpen$.next(!this.optionsOpen$.value); }
+
+  openPlayerInfo()  { this.playerInfoOpen$.next(true); }
+  closePlayerInfo() { this.playerInfoOpen$.next(false); }
+  togglePlayerInfo() { this.playerInfoOpen$.next(!this.playerInfoOpen$.value); }
+
+  goToCombatResults() { this.setScreen('combat-results'); }
+  goToCardReward()    { this.setScreen('card-reward'); }
+
+  /** True when there are pending ability choices that must be resolved first. */
+  private hasPendingChoices(): boolean {
+    return (this.state$.value?.pendingAbilityChoices ?? []).length > 0;
+  }
 
   // ---------------------------------------------------------------------------
   // Run lifecycle
@@ -154,6 +181,7 @@ export class GameStateService {
   // ---------------------------------------------------------------------------
 
   moveToNode(nodeId: string) {
+    if (this.hasPendingChoices()) return;
     this.api.movePlayer(nodeId).subscribe(state => {
       this.state$.next(state);
       const event = this.getCurrentEvent(state);
@@ -179,12 +207,20 @@ export class GameStateService {
     this.api.battleDrawCard().subscribe(updated => this.state$.next(updated));
   }
 
+  /** Choose an ability from a pending unlock choice. */
+  chooseAbility(companionId: string, abilityId: string) {
+    this.api.chooseAbility(companionId, abilityId).subscribe(updated => {
+      this.state$.next(updated);
+    });
+  }
+
   /** Play a card with a companion; backend validates, resolves effect, persists. */
   playCardWithCompanion(
     cardId: string,
     companionId: string,
     options?: { targetType?: string; targetIds?: string[] }
   ): boolean {
+    if (this.hasPendingChoices()) return false;
     const state = this.state$.value;
     if (!state || !state.player.hand.includes(cardId) || !state.companions?.length) {
       return false;
@@ -196,14 +232,51 @@ export class GameStateService {
     }
     this.api
       .battlePlayCard(cardId, companionId, options?.targetIds)
-      .subscribe(updated => this.state$.next(updated));
+      .subscribe(updated => {
+        this.state$.next(updated);
+        if (updated.battle && !updated.battle.active) {
+          this.goToCombatResults();
+        }
+      });
     return true;
+  }
+
+  proceedFromResults() {
+    const state = this.state$.value;
+    if (!state) return;
+    const pending = state.battle?.pendingCardRewards ?? [];
+    if (pending.length > 0) {
+      this.goToCardReward();
+    } else {
+      this.setScreen('map');
+    }
+  }
+
+  claimReward(companionId: string, cardId: string) {
+    this.api.battleClaimReward(companionId, cardId).subscribe(updated => {
+      this.state$.next(updated);
+      const remaining = updated.battle?.pendingCardRewards ?? [];
+      if (remaining.length > 0) {
+        this.goToCardReward();
+      } else {
+        this.setScreen('map');
+      }
+    });
   }
 
   /** End the player's turn; backend refills energy and runs enemy AI. */
   endTurn() {
-    if (!this.state$.value) return;
-    this.api.battleEndTurn().subscribe(updated => this.state$.next(updated));
+    if (!this.state$.value || this.hasPendingChoices()) return;
+    this.api.battleEndTurn().subscribe(updated => {
+      this.state$.next(updated);
+      const actions = updated.battle?.lastTurnActions ?? [];
+      if (actions.length > 0) {
+        this.endTurnResult$.next(actions);
+      }
+      if (updated.battle && !updated.battle.active) {
+        this.goToCombatResults();
+      }
+    });
   }
 
   // ---------------------------------------------------------------------------

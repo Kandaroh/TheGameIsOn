@@ -1,119 +1,159 @@
 # TheGameIsOn Architecture
 
+> Full interface definitions: [docs/data-model.md](data-model.md)  
+> Full endpoint list: [docs/api-reference.md](api-reference.md)  
+> Battle logic deep-dive: [docs/battle-system.md](battle-system.md)  
+> Frontend screens & components: [docs/frontend-guide.md](frontend-guide.md)
+
+---
+
 ## Overview
 
-This scaffold splits the project into two clearly separated layers:
-- `frontend/` — Angular UI and feature modules for Menu, Map, and Battle.
-- `backend/` — Node.js API with route definitions, controller actions, domain services, repository persistence, and JSON state storage.
+Two-layer architecture:
+- **`frontend/`** — Angular 17 SPA. Screen switching via `GameStateService.screen$` (no Angular Router). Feature modules for menu, map, battle, combat-results, card-reward, and event placeholders.
+- **`backend/`** — Express 4 API. Layered as `routes → controllers → services → repo → models`. All state is JSON-serializable.
 
-All game state is JSON-serializable and persisted to `backend-data/game-state.json`.
+**Persistence:**
+- Runtime state: `backend/data/saves/game-state.json`
+- Static data: `backend/data/static/` — `card-effects.json`, `companions.json`, `enemies.json`, `events.json`
 
-## Frontend structure
+---
 
-- `frontend/src/app/app.module.ts` — bootstraps the application, imports feature modules and `HttpClientModule`.
-- `frontend/src/app/features/menu/` — menu screen and companion-selection screen.
-- `frontend/src/app/features/map/` — map screen module and component.
-- `frontend/src/app/features/battle/` — battle screen module and component.
-- `frontend/src/app/features/events/` — placeholder event screens (`rest`, `hard-battle`, `new-object`, `power-up`, `end`).
-- `frontend/src/app/shared/models/` — shared domain models (mirrored from backend).
-- `frontend/src/app/shared/services/` — `ApiService`, `GameStateService`, `DeckService`, `CardEffectService`.
-- `frontend/src/app/shared/components/card-frame/` — reusable card-frame component used in battle, companions, and hand.
+## Backend layer map
 
-### Frontend design goals
+```
+Routes (game.routes.ts)
+  └─ Controller (game.controller.ts)
+       ├─ BattleService      — card play, enemy AI, rewards, turn flow
+       ├─ CardEffectService   — pure effect application (damage/shield/heal)
+       ├─ EnemySpawnerService — spawn + level-scale enemies
+       ├─ LevelingService     — EXP thresholds, level-up stat boosts
+       ├─ DeckService         — draw, shuffle, build starting deck
+       ├─ GameLogicService    — initial state, legacy move/play
+       ├─ MapGeneratorService — layered graph + area zones
+       ├─ EventSpawnerService — enforce spawn caps from events.json
+       └─ CompanionService    — companion catalogue loader
+           │
+           ├─ Repos:
+           │   ├─ StateRepository      (data/saves/game-state.json)
+           │   ├─ CardEffectRepository  (data/static/card-effects.json)
+           │   ├─ EnemyRepository       (data/static/enemies.json)
+           │   └─ EventRepository       (data/static/events.json)
+           │
+           └─ Models: GameState, Player, Card, Companion, BattleState,
+                      BattleEnemy, EnemyDefinition, EventDefinition, etc.
+```
 
-- Each feature is encapsulated in its own module.
-- Components are thin: they delegate all game-rule decisions to `GameStateService`, which in turn delegates to the backend API.
-- Shared models mirror backend types exactly; changes to either side must be applied to both.
-- `GameStateService` is the single source of truth for `state$`; all backend responses are piped directly into it.
+### Key services
 
-## Backend structure
+| Service | File | Responsibility |
+|---|---|---|
+| `BattleService` | `services/battle.service.ts` | `startBattle()`, `playCard()`, `endTurn()`, `collectRewards()` |
+| `CardEffectService` | `services/card-effect.service.ts` | `apply(effect, source, targets, state)` — damage, shield, heal |
+| `EnemySpawnerService` | `services/enemy-spawner.service.ts` | Filter pool → roll spawn chance → scale level/HP/rewards |
+| `LevelingService` | `services/leveling.service.ts` | `processLevelUps()`, `withNextLevelExp()` |
+| `DeckService` | `services/deck.service.ts` | `drawCards()`, `buildStartingDeck()` |
+| `EventSpawnerService` | `services/event-spawner.service.ts` | `assignEvents(nodes)` — enforce min/max from `events.json` |
+| `MapGeneratorService` | `services/map-generator.service.ts` | Layered graph with area zones (forest → dungeon → ruins → volcano) |
 
-- `backend/src/server.ts` — Express application setup and API mount points.
-- `backend/src/routes/game.routes.ts` — API route definitions.
-- `backend/src/controllers/game.controller.ts` — request handling and orchestration.
-- `backend/src/services/game-logic.service.ts` — domain logic for move and play actions.
-- `backend/src/services/battle.service.ts` — resolves card plays and enemy-turn AI against `BattleState`.
-- `backend/src/repo/state-repo.ts` — persistence repository for `GameState`.
-- `backend/src/repo/card-effect-repo.ts` — reads and caches `card-effects.json`.
-- `backend/src/services/persistence.service.ts` — file-based JSON load/save.
-- `backend/src/models/` — domain models: `Player`, `Deck`, `Card`, `Companion`, `Graph`, `Node`, `NodeEvent`, `GameState`, `BattleState`, `CardEffect`.
-- `backend/backend-data/card-effects.json` — effect catalogue (id, action, value, target per card × variant).
+### Repositories
 
-### Events and icons
+| Repo | Static file | Cache | Notes |
+|---|---|---|---|
+| `CardEffectRepository` | `data/static/card-effects.json` | `Map<string, CardEffect>` | |
+| `EnemyRepository` | `data/static/enemies.json` | `Map<string, EnemyDefinition>` | Warns if any enemy has ≠ 3 attacks |
+| `EventRepository` | `data/static/events.json` | `Map<string, EventDefinition>` | `getByType(type)` convenience method |
+| `StateRepository` | `data/saves/game-state.json` | — | Migration guards for `encounterCount`, `nextLevelExp` |
 
-- Events are represented as typed `NodeEvent` in `backend/src/models/node-event.ts` and include: `battle`, `rest`, `hard battle`, `new object`, `power up`, `treasure`, `start`, and `end`.
-- The map generator attaches short icons to nodes; icons are defined in `backend/src/services/map-generator.service.ts` (`⚔️`, `🛌`, `💀`, `🪄`, `⚡`, `🎁`, `🏁`).
+---
 
-The `end` node emits an `end` event and is intended to trigger an end-screen flow in the frontend.
+## Frontend layer map
 
-### Backend design goals
+See [docs/frontend-guide.md](frontend-guide.md) for full detail.
 
-- Routes remain thin and delegate to controllers.
-- Controllers orchestrate repository and service logic.
-- Business logic is isolated from persistence.
-- JSON persistence is explicit and serializable.
+| Layer | Key files |
+|---|---|
+| Root shell | `app.component.ts` — `*ngIf` screen switching |
+| State management | `GameStateService` — `state$`, `screen$`, `endTurnResult$` |
+| API layer | `ApiService` — HTTP calls to `localhost:4000` |
+| Shared components | `CardFrameComponent`, `CardPreviewComponent`, `PlayerInfoPanelComponent` |
+| Feature screens | `menu/`, `map/`, `battle/`, `combat-results/`, `card-reward/`, `events/` |
+
+### Shared components added in Plans 01–04
+
+| Component | Purpose | Trigger |
+|---|---|---|
+| `CardPreviewComponent` | Floating card preview on hover | `CardPreviewService.show(card, x, y)` |
+| `PlayerInfoPanelComponent` | Slide-out panel with Deck + Companions tabs | `GameStateService.togglePlayerInfo()` |
+| `AttackResultPopupComponent` | Modal showing enemy turn actions | `endTurnResult$` emission after `endTurn()` |
+
+---
+
+## Events system
+
+Event definitions are data-driven via `backend/data/static/events.json`. Each `EventDefinition` specifies:
+- `type` — matches `NodeEventType`
+- `spawnRules` — `{ min, max, allowedAreas }` enforced by `EventSpawnerService`
+- `monsterSpawning` — optional `MonsterSpawnConfig` for combat events
+
+See [docs/game-events-spec.md](game-events-spec.md) for the full event table.
+
+---
+
+## Enemy turn action log
+
+`BattleState.lastTurnActions` (`EnemyTurnAction[]`) is populated each time `endTurn()` runs and consumed by the frontend to show the `AttackResultPopupComponent`. Each entry records:
+
+`{ enemyId, enemyName, attackName, targetId, targetName, damageDealt, killedTarget }`
+
+`damageDealt` is computed as `targetHpBefore − targetHpAfter` (positive = damage, negative = healing).
+
+---
 
 ## Extension patterns
 
+### Add a new card effect action
+
+1. Add the action string to `CardEffectAction` in `backend/src/models/card-effect.ts`.
+2. Add a `case` in `CardEffectService.apply()` (`backend/src/services/card-effect.service.ts`).
+3. Add effect record(s) to `backend/data/static/card-effects.json`.
+4. Set `effectId` / `enhancedEffectId` on the relevant card(s).
+
 ### Add a new card property
 
-1. Update `backend/src/models/card.ts` to add the new typed property.
-2. Mirror the change in `frontend/src/app/shared/models/card.model.ts`.
-3. If the property drives combat resolution, add a `case` in `BattleService.applyEffect()` and a record in `card-effects.json`.
-
-This uses ≤4 files and preserves the existing modular structure.
+1. Update `backend/src/models/card.ts`.
+2. Mirror in `frontend/src/app/shared/models/card.model.ts`.
+3. Update `CardFrameComponent` if the property needs display.
 
 ### Add a new node event type
 
-1. Add a new event type in `backend/src/models/node-event.ts`.
-2. Add a new event type in `frontend/src/app/shared/models/node.model.ts`.
-3. Implement handling in a dedicated new module or service, e.g. `backend/src/services/node-events/treasure-event.service.ts`.
+1. Add to `NodeEventType` in `backend/src/models/node-event.ts`.
+2. Mirror in `frontend/src/app/shared/models/node.model.ts`.
+3. Add an `EventDefinition` entry in `backend/data/static/events.json`.
+4. Create a frontend component under `features/events/<name>/`.
+5. Wire into `app.component.ts` template with `*ngIf` on `currentEvent$`.
 
-Because node events are typed as `NodeEvent`, new event behavior can be layered in a single new module.
+### Add a new API endpoint
 
-### Add a new player action
+1. Route: `backend/src/routes/game.routes.ts`.
+2. Controller method: `backend/src/controllers/game.controller.ts`.
+3. Service logic: appropriate service (`BattleService` for battle, `GameLogicService` for map, etc.).
+4. Frontend: add method to `ApiService`, expose in `GameStateService`, pipe response into `state$`.
 
-1. Add a new API endpoint in `backend/src/routes/game.routes.ts`.
-2. Add a new controller method in `backend/src/controllers/game.controller.ts`.
-3. Add a new service method in `backend/src/services/game-logic.service.ts`.
+### Add a new enemy
 
-This keeps route definitions, controller orchestration, and logic separate.
+Add a JSON object to `backend/data/static/enemies.json`. Must have exactly 3 attacks. Each attack needs an `effectId` pointing to `card-effects.json`.
 
-## API contract
+### Add a new companion
 
-### GET `/api/game/state`
-Returns the current serialized `GameState`.
+Add a JSON object to `backend/data/static/companions.json` with `priceDecks` (common/uncommon/rare card arrays).
 
-### POST `/api/game/state`
-Body: `GameState`. Persists the provided state.
-
-### POST `/api/game/action/move`
-Body: `{ nextNodeId: string }`. Moves the player to a connected node.
-
-### POST `/api/game/action/play-card`
-Body: `{ cardId: string }`. Plays a card from hand (mana-based, legacy path).
-
-### POST `/api/game/action/battle/play-card`
-Body: `{ cardId: string, companionId: string, targetIds?: string[] }`.  
-Plays a card during a battle encounter. `BattleService` validates, resolves the card effect from `card-effects.json`, mutates `BattleState`, and persists the result.
-
-### POST `/api/game/action/battle/end-turn`
-Body: `{}`.  
-Ends the player's turn: refills companion energy, runs enemy AI (each living enemy deals 2 damage to every companion), increments `battle.turn`.
-
-### GET `/api/game/action/companions`
-Returns the full companion catalogue.
-
-### GET `/api/game/events`
-Returns all event specs and spawn caps.
-
-### POST `/api/game/events/validate`
-Body: `{ eventType: string, count: number }`. Returns `{ valid: boolean, reason?: string }`.
+---
 
 ## Naming rationale
 
-- `features/` indicates UI screens and user-focused workflows.
-- `shared/models/` holds serializable game domain types.
-- `shared/services/` holds reusable client services.
-- `routes/`, `controllers/`, `services/`, `repo/`, and `models/` mirror clean backend layering.
-- `docs/architecture.md` explains extension patterns and why files are structured this way.
+- `features/` — UI screens and user-facing workflows.
+- `shared/models/` — serializable game domain types (mirrored from backend).
+- `shared/services/` — reusable client services.
+- `shared/components/` — reusable UI components (card frame, preview, player info).
+- `routes/` → `controllers/` → `services/` → `repo/` → `models/` — clean backend layering.

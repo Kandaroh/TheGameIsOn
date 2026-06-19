@@ -1,0 +1,94 @@
+﻿<section class="map-screen" *ngIf="state$ | async as state">
+
+  <!-- ── Header ──────────────────────────────────────────────── -->
+  <header class="map-header">
+    <div class="map-header-title">
+      <h2>&#9660; World Map</h2>
+      <p>Select a glowing node to advance your journey</p>
+    </div>
+    <div class="player-stats">
+      <span>&#10084; {{ state.player.life }}</span>
+      <span>&#9670; {{ state.player.mana }}</span>
+      <span>&#9733; {{ state.player.gold ?? 0 }}g</span>
+    </div>
+  </header>
+
+  <!-- ── Body: canvas + legend ────────────────────────────────── -->
+  <div class="map-body">
+
+    <!-- Graph canvas -->
+    <div class="graph-canvas">
+
+      <!-- Zone stripe decorations (cosmetic) -->
+      <div class="zone-stripe zone-stripe-forest"  aria-hidden="true"></div>
+      <div class="zone-stripe zone-stripe-dungeon" aria-hidden="true"></div>
+      <div class="zone-stripe zone-stripe-ruins"   aria-hidden="true"></div>
+      <div class="zone-stripe zone-stripe-volcano" aria-hidden="true"></div>
+
+      <!-- Zone labels (right-edge watermarks) -->
+      <span class="zone-label forest"  style="top:12%"  aria-hidden="true">Forest</span>
+      <span class="zone-label dungeon" style="top:37%"  aria-hidden="true">Dungeon</span>
+      <span class="zone-label ruins"   style="top:62%"  aria-hidden="true">Ruins</span>
+      <span class="zone-label volcano" style="top:85%"  aria-hidden="true">Volcano</span>
+
+      <!-- SVG edges -->
+      <svg class="graph-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <ng-container *ngFor="let edge of state.graph.edges">
+          <line
+            [attr.x1]="(getNodeLayout(state, edge.from)?.x ?? 0) + '%'"
+            [attr.y1]="(getNodeLayout(state, edge.from)?.y ?? 0) + '%'"
+            [attr.x2]="(getNodeLayout(state, edge.to)?.x ?? 0) + '%'"
+            [attr.y2]="(getNodeLayout(state, edge.to)?.y ?? 0) + '%'"
+            [class.active-path]="isOnActivePath(state, edge)"
+            class="path-line"
+          />
+        </ng-container>
+      </svg>
+
+      <!-- Nodes -->
+      <ng-container *ngFor="let node of state.graph.nodes">
+        <button
+          class="graph-node"
+          [class.current]="node.id === state.player.position"
+          [class.selectable]="isSelectable(state, node)"
+          [ngClass]="[nodeEventClass(node), nodeAreaClass(node)]"
+          [disabled]="!isSelectable(state, node)"
+          [style.left.%]="getNodeLayout(state, node.id)?.x ?? 0"
+          [style.top.%]="getNodeLayout(state, node.id)?.y ?? 0"
+          [attr.aria-label]="nodeTitle(node)"
+          (click)="selectNode(node, state)">
+          <span class="node-icon">{{ nodeIcon(node) }}</span>
+          <span class="node-type-label">{{ node.event?.type }}</span>
+          <!-- Tooltip -->
+          <span class="node-tooltip">{{ nodeTitle(node) }}</span>
+        </button>
+      </ng-container>
+
+    </div>
+    <!-- /graph-canvas -->
+
+    <!-- Legend panel -->
+    <aside class="map-legend">
+
+      <div class="legend-section">
+        <div class="legend-title">Events</div>
+        <div class="legend-item" *ngFor="let entry of legendEvents">
+          <span class="legend-icon">{{ entry.icon }}</span>
+          <span>{{ entry.label }}</span>
+        </div>
+      </div>
+
+      <div class="legend-section">
+        <div class="legend-title">Zones</div>
+        <div class="legend-item" *ngFor="let entry of legendAreas">
+          <span class="legend-dot" [ngClass]="entry.area"></span>
+          <span>{{ entry.label }}</span>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+  <!-- /map-body -->
+
+</section>

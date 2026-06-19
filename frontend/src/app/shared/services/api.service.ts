@@ -54,7 +54,25 @@ export class ApiService {
     return this.http.post<GameStateModel>(`${API_BASE}/action/battle/draw-card`, {});
   }
 
-  finalizeCompanions(companions: CompanionModel[], baseCards: CardModel[]) {
+    finalizeCompanions(companions: CompanionModel[], baseCards: CardModel[]) {
     return this.http.post<GameStateModel>(`${API_BASE}/action/finalize-companions`, { companions, baseCards });
+  }
+
+  battleEnd() {
+    return this.http.post<GameStateModel>(`${API_BASE}/action/battle/end`, {});
+  }
+
+    battleClaimReward(companionId: string, cardId: string) {
+    return this.http.post<GameStateModel>(
+      `${API_BASE}/action/battle/claim-reward`,
+      { companionId, cardId }
+    );
+  }
+
+  chooseAbility(companionId: string, abilityId: string) {
+    return this.http.post<GameStateModel>(
+      `${API_BASE}/action/choose-ability`,
+      { companionId, abilityId }
+    );
   }
 }
