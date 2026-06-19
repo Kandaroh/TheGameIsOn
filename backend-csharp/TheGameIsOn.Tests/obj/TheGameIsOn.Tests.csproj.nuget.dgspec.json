@@ -1,0 +1,163 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.Tests\\TheGameIsOn.Tests.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.API\\TheGameIsOn.API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.API\\TheGameIsOn.API.csproj",
+        "projectName": "TheGameIsOn.API",
+        "projectPath": "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.API\\TheGameIsOn.API.csproj",
+        "packagesPath": "C:\\Users\\Ricca\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.API\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Ricca\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.Tests\\TheGameIsOn.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.Tests\\TheGameIsOn.Tests.csproj",
+        "projectName": "TheGameIsOn.Tests",
+        "projectPath": "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.Tests\\TheGameIsOn.Tests.csproj",
+        "packagesPath": "C:\\Users\\Ricca\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Ricca\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.API\\TheGameIsOn.API.csproj": {
+                "projectPath": "C:\\Users\\Ricca\\Documents\\Visual Studio 2019\\Progetti\\TheGameIsOn\\backend-csharp\\TheGameIsOn.API\\TheGameIsOn.API.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[8.10.0, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[10.0.9, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[10.0.9, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.12.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.2, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.9.2, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.8.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

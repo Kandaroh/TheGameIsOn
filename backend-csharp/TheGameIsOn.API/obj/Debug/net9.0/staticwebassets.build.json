@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "hGY2AOhTabKAH0EcbhZvRDbqjg+y+DixsZu1JYd4nXQ=",
+  "Source": "TheGameIsOn.API",
+  "BasePath": "_content/TheGameIsOn.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
